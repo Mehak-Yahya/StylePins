@@ -7,8 +7,8 @@ export default function Footer() {
 
         {/* Left */}
         <div className="footer-brand">
-          <h1>Pinterest</h1>
-          <p>© 2026 Pinterest</p>
+          <h1>StylePins</h1>
+          <p>© 2026 StylePins</p>
         </div>
 
         {/* Column 1 */}

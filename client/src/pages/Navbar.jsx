@@ -1,6 +1,6 @@
 import "../styles/Navbar.css";
 import { FiSearch } from "react-icons/fi";
-const Navbar = () => {
+const Navbar = ({ openSignup, openLogin }) => {
   return (
     <nav className="navbar">
       {/* Left */}
@@ -9,7 +9,6 @@ const Navbar = () => {
         <div className="explore">Explore</div>
       </div>
 
-      {/* Center */}
       <div className="nav-center">
         <div className="search-box">
           <span className="search-icon">
@@ -23,7 +22,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Right */}
       <div className="nav-right">
         <div className="nav-links">
           <span>About</span>
@@ -33,8 +31,12 @@ const Navbar = () => {
         </div>
 
         <div className="nav-buttons">
-          <button className="login">Log in</button>
-          <button className="signup">Sign Up</button>
+          <button className="login" onClick={openLogin}>
+            Log in
+          </button>
+          <button className="signup" onClick={openSignup}>
+            Sign Up
+          </button>
         </div>
       </div>
     </nav>
