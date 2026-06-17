@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import "../styles/hero.css";
 const Signup = ({ onClose, openLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
