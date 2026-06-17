@@ -3,6 +3,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+// ✅ controllers import
+import {
+  forgotPassword,
+  resetPassword
+} from "../controllers/authController.js";
+
 const router = express.Router();
 
 /* REGISTER */
@@ -15,18 +21,11 @@ router.post("/register", async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
-      email,
-      password: hashed
-    });
+    const user = await User.create({ email, password: hashed });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-    res.json({
-      token,
-      user: { id: user._id, email: user.email }
-    });
-
+    res.json({ token, user });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -45,14 +44,14 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-    res.json({
-      token,
-      user: { id: user._id, email: user.email }
-    });
-
+    res.json({ token, user });
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
+/* RESET FLOW */
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
 
 export default router;
