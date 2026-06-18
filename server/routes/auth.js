@@ -49,7 +49,28 @@ router.post("/login", async (req, res) => {
     res.status(500).json(err);
   }
 });
+/* GOOGLE LOGIN */
+router.post("/google-login", async (req, res) => {
+  try {
+    const { name, email, photo, uid } = req.body;
 
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({
+        name,
+        email,
+        photo,
+        googleId: uid
+      });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.log("Google login error:", err);
+    res.status(500).json({ message: err.message });
+  }
+});
 /* RESET FLOW */
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);

@@ -6,13 +6,21 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+
   password: {
     type: String,
-    required: true
+    required: false   // ✅ FIX: Google users don't need password
   },
-  resetToken: String,
-  resetTokenExpiry: Date
 
+  googleId: {
+    type: String,
+    default: null      // ✅ for Google login users
+  },
+
+  resetToken: String,
+  resetTokenExpiry: Date,
+
+  photo: String
 });
 
 export default mongoose.model("User", userSchema);

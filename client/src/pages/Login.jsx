@@ -2,6 +2,8 @@ import "../styles/hero.css";
 import { QRCodeCanvas } from "qrcode.react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth, provider } from "../firebase";
+import { signInWithPopup } from "firebase/auth"; // ✅ FIX ADDED
 
 const Login = ({ onClose }) => {
   const [email, setEmail] = useState("");
@@ -25,7 +27,6 @@ const Login = ({ onClose }) => {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ ADDED LOGIC ONLY
         alert("Login successful!");
 
         localStorage.setItem("token", data.token);
@@ -33,7 +34,6 @@ const Login = ({ onClose }) => {
 
         onClose();
 
-        // ✅ FIXED ROUTE NAVIGATION
         navigate("/profile");
       } else {
         alert(data.message || "Login failed");
@@ -44,6 +44,49 @@ const Login = ({ onClose }) => {
     }
   };
 
+  // ✅ FIXED: moved INSIDE component
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const payload = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      };
+
+      const res = await fetch("http://localhost:5000/api/auth/google-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      console.log("Backend response:", data);
+
+      if (res.ok) {
+        // store auth data
+        localStorage.setItem("token", data.token || "google-login");
+        localStorage.setItem("user", JSON.stringify(data.user || payload));
+
+        // close modal FIRST (prevents flicker)
+        onClose();
+
+        setTimeout(() => {
+          navigate("/profile");
+        }, 50);
+      } else {
+        alert(data.message || "Login failed");
+      }
+    } catch (err) {
+      console.log("Google login error:", err);
+    }
+  };
   return (
     <div className="login-overlay" onClick={onClose}>
       <div className="login-modal" onClick={(e) => e.stopPropagation()}>
@@ -52,11 +95,9 @@ const Login = ({ onClose }) => {
           ✕
         </button>
 
-        {/* TITLE */}
         <h2 className="login-title">Welcome to StylePins</h2>
 
         <div className="login-container">
-          {/* LEFT SIDE FORM */}
           <div className="login-left">
             <div className="input-box">
               <span className="label">Email</span>
@@ -86,13 +127,16 @@ const Login = ({ onClose }) => {
             >
               Forgot password?
             </p>
+
             <button className="login-btn" onClick={handleLogin}>
               Log in
             </button>
 
             <div className="divider">OR</div>
 
-            <button className="google-btn">Continue with Google</button>
+            <button className="google-btn" onClick={handleGoogleLogin}>
+              Continue with Google
+            </button>
 
             <p className="meta-text">
               Facebook login is no longer available. Update login method

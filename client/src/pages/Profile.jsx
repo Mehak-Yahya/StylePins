@@ -6,19 +6,26 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    try {
+      const storedUser = localStorage.getItem("user");
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
+      if (!storedUser || storedUser === "undefined") {
+        navigate("/");
+        return;
+      }
+
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+    } catch (err) {
+      console.log("Invalid user in localStorage:", err);
+      localStorage.removeItem("user");
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
     navigate("/");
   };
 
@@ -30,7 +37,7 @@ const Profile = () => {
         {user ? (
           <>
             <p><b>Email:</b> {user.email}</p>
-            <p><b>User ID:</b> {user.id}</p>
+            <p><b>User ID:</b> {user.uid || user._id}</p>
 
             <button style={styles.logoutBtn} onClick={handleLogout}>
               Logout
