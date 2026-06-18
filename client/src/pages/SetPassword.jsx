@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import "../styles/reset.css";
 import ResetNavbar from "./resetnav";
 
-const SetPassword = () => {
+const SetPassword = ({ openLogin, openSignup }) => {
   const { token } = useParams();
   const [newPassword, setNewPassword] = useState("");
 
@@ -16,7 +16,7 @@ const SetPassword = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ newPassword }),
-      },
+      }
     );
 
     const data = await res.json();
@@ -30,7 +30,10 @@ const SetPassword = () => {
 
   return (
     <>
-      <ResetNavbar />
+      <ResetNavbar
+        openLogin={openLogin}
+        openSignup={openSignup}
+      />
 
       <div className="set-container">
         <div className="set-card">

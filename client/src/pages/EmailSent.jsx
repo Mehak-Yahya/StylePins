@@ -3,16 +3,19 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import ResetNavbar from "./resetnav";
 import "../styles/reset.css";
 
-const EmailSent = () => {
+const EmailSent = ({ openLogin, openSignup }) => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  // Email passed from ResetPassword.jsx
   const email = state?.email || "your email address";
 
   return (
     <>
-      <ResetNavbar />
+      {/* NAVBAR FIX */}
+      <ResetNavbar
+        openLogin={openLogin}
+        openSignup={openSignup}
+      />
 
       <div className="email-sent-container">
         <div className="email-card">
@@ -40,9 +43,14 @@ const EmailSent = () => {
               Try again
             </button>
 
-            <Link to="/login" className="back-link">
+            {/* FIXED LOGIN BUTTON */}
+            <span
+              className="back-link"
+              onClick={() => openLogin?.()}
+              style={{ cursor: "pointer" }}
+            >
               Back to login
-            </Link>
+            </span>
           </div>
         </div>
       </div>

@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import ResetNavbar from "./resetnav";
 import "../styles/reset.css";
 
-const ResetPassword = () => {
+const ResetPassword = ({ openLogin, openSignup }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -21,9 +20,7 @@ const ResetPassword = () => {
         "http://localhost:5000/api/auth/forgot-password",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
         }
       );
@@ -31,10 +28,7 @@ const ResetPassword = () => {
       const data = await res.json();
 
       if (res.ok) {
-        // Navigate to Email Sent page and pass the entered email
-        navigate("/email-sent", {
-          state: { email },
-        });
+        navigate("/email-sent", { state: { email } });
       } else {
         alert(data.message || "Error");
       }
@@ -45,7 +39,11 @@ const ResetPassword = () => {
 
   return (
     <div className="reset-container">
-      <ResetNavbar />
+
+      <ResetNavbar
+        openLogin={openLogin}
+        openSignup={openSignup}
+      />
 
       <div className="reset-card">
         <h2>Reset your password</h2>
@@ -74,4 +72,3 @@ const ResetPassword = () => {
 };
 
 export default ResetPassword;
-
