@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth"; // ✅ FIX ADDED
 
-const Login = ({ onClose }) => {
+const Login = ({ onClose, openSignup }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -143,7 +143,17 @@ const Login = ({ onClose }) => {
             </p>
 
             <p className="meta-text">
-              New to Pinterest? <span className="link">Sign up</span>
+              New to Pinterest?{" "}
+              <span
+                className="link"
+                onClick={() => {
+                  if (onClose) onClose(); // close login
+                  if (openSignup) openSignup(); // open signup
+                }}
+                style={{ cursor: "pointer", color: "blue" }}
+              >
+                Sign up
+              </span>
             </p>
 
             <p className="meta-text">

@@ -85,7 +85,7 @@ const Hero = ({ openSignup, openLogin }) => {
           <div className="center-column">
             <img
               className="big-img"
-              src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800"
+              src="https://images.unsplash.com/photo-1604871000636-074fa5117945?auto=format&fit=crop&w=800&q=80"
               alt=""
             />
 
@@ -220,26 +220,22 @@ const Hero = ({ openSignup, openLogin }) => {
 
             <div className="favoriteideas-content">
               <h3>Search by skin tone</h3>
-
               <p>
                 Search with skin tone ranges for beauty ideas that <br></br>{" "}
                 represent you.
               </p>
-
-              <button>Join StylePins</button>
+              <button onClick={openSignup}>Join StylePins</button>{" "}
             </div>
           </div>
 
           <div className="favoriteideas-row reverse">
             <div className="favoriteideas-content">
               <h3>Collaborate with group boards</h3>
-
               <p>
                 Visualize your ideas with others, using a StylePins <br></br>{" "}
                 account
               </p>
-
-              <button>Join StylePins</button>
+              <button onClick={openSignup}>Join StylePins</button>{" "}
             </div>
 
             <div className="favoriteideas-image">
@@ -260,13 +256,11 @@ const Hero = ({ openSignup, openLogin }) => {
 
             <div className="favoriteideas-content">
               <h3>Search visually with images</h3>
-
               <p>
                 Search objects within an image to find<br></br> more styles
                 you'll love
               </p>
-
-              <button>Join StylePins</button>
+              <button onClick={openSignup}>Join StylePins</button>{" "}
             </div>
           </div>
         </div>

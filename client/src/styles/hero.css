@@ -301,9 +301,9 @@
 }
 
 .favoriteideas-top {
-  background: #f8f8f6;
+  background: #ffffff;
   text-align: center;
-  padding: 100px 20px 60px;
+  padding: 100px 20px 17px;
 }
 
 .favoriteideas-top h2 {
@@ -771,4 +771,3 @@ input::placeholder {
   font-size: 13px;
   font-weight: 400;
 }
-
