@@ -1,11 +1,16 @@
 import "../styles/Navbar.css";
 import { FiSearch } from "react-icons/fi";
+import logo from "../assets/Slog-removebg-preview.png"; // adjust path if needed
+
 const ResetNavbar = ({ openSignup, openLogin }) => {
   return (
     <nav className="navbar">
       {/* Left */}
       <div className="nav-left">
-        <div className="logo">StylePins</div>
+        <div className="logo">
+          <img src={logo} alt="StylePins Logo" className="logo-image" />
+          <span>StylePins</span>
+        </div>{" "}
         <div className="explore">Explore</div>
       </div>
 
@@ -21,15 +26,14 @@ const ResetNavbar = ({ openSignup, openLogin }) => {
           />
         </div>
       </div>
-        <div className="nav-buttons">
-          <button className="login" onClick={openLogin}>
-            Log in
-          </button>
-          <button className="signup" onClick={openSignup}>
-            Sign Up
-          </button>
-        </div>
-     
+      <div className="nav-buttons">
+        <button className="login" onClick={openLogin}>
+          Log in
+        </button>
+        <button className="signup" onClick={openSignup}>
+          Sign Up
+        </button>
+      </div>
     </nav>
   );
 };

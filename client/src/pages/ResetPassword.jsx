@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import ResetNavbar from "./resetnav";
 
+import { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import ResetNavbar from "./resetnav";
 import "../styles/reset.css";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState(searchParams.get("ue") || "");
 
   const handleSend = async () => {
@@ -15,18 +17,24 @@ const ResetPassword = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/forgot-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email })
-      });
+      const res = await fetch(
+        "http://localhost:5000/api/auth/forgot-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
 
       const data = await res.json();
 
       if (res.ok) {
-        alert("Reset email sent!");
+        // Navigate to Email Sent page and pass the entered email
+        navigate("/email-sent", {
+          state: { email },
+        });
       } else {
         alert(data.message || "Error");
       }
@@ -43,9 +51,9 @@ const ResetPassword = () => {
         <h2>Reset your password</h2>
         <p>What's your email, name, or username?</p>
 
-        {/* 🔥 input + search in one row */}
         <div className="reset-search">
           <input
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter email"
@@ -57,7 +65,6 @@ const ResetPassword = () => {
           </button>
         </div>
 
-        {/* ✅ main action button */}
         <button onClick={handleSend} className="reset-btn">
           Send reset email
         </button>
@@ -67,3 +74,4 @@ const ResetPassword = () => {
 };
 
 export default ResetPassword;
+
