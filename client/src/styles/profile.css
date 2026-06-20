@@ -1,0 +1,84 @@
+.muiToolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.muiLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.muiLogo {
+  width: 40px;
+  height: 40px;
+  background: #e60023;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.muiSearch {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #efefef;
+  padding: 5px 12px;
+  border-radius: 25px;
+}
+
+.muiRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.muiAvatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* PINTEREST FEED */
+.muiFeed {
+  column-count: 5;
+  column-gap: 15px;
+  padding: 20px;
+}
+
+.muiPin {
+  break-inside: avoid;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.muiPin img {
+  width: 100%;
+  border-radius: 16px;
+}
+
+.muiSaveBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #e60023;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 20px;
+  opacity: 0;
+}
+
+.muiPin:hover .muiSaveBtn {
+  opacity: 1;
+}
