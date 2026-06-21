@@ -16,7 +16,6 @@ StylePins is a Pinterest-inspired fashion discovery and inspiration platform bui
 - Modern Splash Screen
 - Pinterest-inspired UI Design
 - Responsive Layout
-- Visual Content Discovery
 - Fashion Inspiration Feed
 - Masonry Grid Layout
 
