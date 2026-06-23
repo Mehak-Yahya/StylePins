@@ -32,11 +32,13 @@ StylePins is a Pinterest-inspired fashion discovery and inspiration platform bui
 - React Router DOM
 - JavaScript (ES6+)
 - CSS3
+- Masonry
 
 ### Backend & Services
 - Node.js
 - MongodB
 - Firebase Authentication
+- Google Apps
   
 ## Screenshots 
 <img width="1361" height="730" alt="1" src="https://github.com/user-attachments/assets/d4873d36-49d7-4091-9576-d170697fb549" />
