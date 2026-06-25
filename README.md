@@ -75,13 +75,11 @@ StylePins is a Pinterest-inspired fashion discovery and inspiration platform bui
 - Like & Comment System
 - Search & Filters
 - AI-Based Fashion Recommendations
-- Social Sharing Features
 - Real-Time Notifications
 
 ## Author
 
 ### Mehak Yahya
-
 GitHub: [Mehak-Yahya](https://github.com/Mehak-Yahya)
 
 ---
