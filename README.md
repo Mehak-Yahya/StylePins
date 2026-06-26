@@ -82,5 +82,7 @@ StylePins is a Pinterest-inspired fashion discovery and inspiration platform bui
 ### Mehak Yahya
 GitHub: [Mehak-Yahya](https://github.com/Mehak-Yahya)
 
+Email: kandhirmehak@gmail.com 
+
 ---
 
