@@ -1,5 +1,5 @@
-Search.jsx
-to do 
-to add search pin functionality 
-to search pins you want to see
-browser fav content
+# Search.jsx
+# to do 
+# to add search pin functionality 
+# to search pins you want to see
+# browser fav content
