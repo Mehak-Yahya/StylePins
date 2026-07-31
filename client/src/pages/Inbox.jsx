@@ -1,1 +1,2 @@
-add some notification functionality 
+# Inbox.jsx
+# add some notification functionality 
