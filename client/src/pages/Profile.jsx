@@ -1,4 +1,3 @@
-//home screen
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -12,16 +11,96 @@ import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ChatIcon from "@mui/icons-material/Chat";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import "../styles/profile.css";
 
 const demoPins = [
-  { id: 1, img: "https://images.unsplash.com/photo-1520975922284-9e0f1f98c3b4?w=600" },
-  { id: 2, img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600" },
-  { id: 3, img: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600" },
-  { id: 4, img: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600" },
-  { id: 5, img: "https://images.unsplash.com/photo-1521336575822-6da63fb45455?w=600" },
-  { id: 6, img: "https://images.unsplash.com/photo-1520974735194-6c3c7d1f7d55?w=600" },
+  {
+    id: 1,
+    title: "Dark caramel",
+    img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
+    height: 540,
+    category: "Beauty",
+  },
+  {
+    id: 2,
+    title: "Healthy living",
+    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80",
+    height: 420,
+    category: "Lifestyle",
+  },
+  {
+    id: 3,
+    title: "Groceries",
+    img: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80",
+    height: 470,
+    category: "Shopping",
+  },
+  {
+    id: 4,
+    title: "New chapter",
+    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",
+    height: 500,
+    category: "Blog",
+  },
+  {
+    id: 5,
+    title: "How to create the outline effect",
+    img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80",
+    height: 610,
+    category: "Digital Products",
+  },
+  {
+    id: 6,
+    title: "Gold details",
+    img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1000&q=80",
+    height: 430,
+    category: "Jewelry",
+  },
+  {
+    id: 7,
+    title: "What if it all works out?",
+    img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
+    height: 560,
+    category: "Moodboard",
+  },
+  {
+    id: 8,
+    title: "Look like my next client",
+    img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=80",
+    height: 470,
+    category: "Design",
+  },
+  {
+    id: 9,
+    title: "Minimal living",
+    img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1000&q=80",
+    height: 650,
+    category: "Home",
+  },
+  {
+    id: 10,
+    title: "Soft tones",
+    img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80",
+    height: 520,
+    category: "Style",
+  },
+  {
+    id: 11,
+    title: "Brand mood",
+    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1000&q=80",
+    height: 430,
+    category: "Inspiration",
+  },
+  {
+    id: 12,
+    title: "Daily picks",
+    img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80",
+    height: 520,
+    category: "Creative",
+  },
 ];
 
 export default function Profile() {
@@ -43,53 +122,58 @@ export default function Profile() {
 
   return (
     <Box className="profilePage">
-
-      {/* NAVBAR */}
-      <AppBar position="sticky" color="default" elevation={1}>
+      <AppBar position="sticky" color="default" elevation={0} className="profileAppBar">
         <Toolbar className="muiToolbar">
-
           <Box className="muiLeft">
             <div className="muiLogo">P</div>
-
-            <Button
-              variant="contained"
-              sx={{ backgroundColor: "#111", color: "#fff" }}
-            >
-              Home
-            </Button>
+            <h2 className="brandName">StylePins</h2>
           </Box>
 
-          <Box className="muiSearch">
-            <SearchIcon />
-            <InputBase placeholder="Search ideas" fullWidth />
+          <Box className="topCenterPill">
+            <div className="miniBrand">
+              <div className="miniAvatar">V</div>
+              <span>VibeWear</span>
+            </div>
+            <ArrowDropDownIcon className="pillArrow" />
           </Box>
 
           <Box className="muiRight">
-            <IconButton><NotificationsIcon /></IconButton>
-            <IconButton><ChatIcon /></IconButton>
-
-            <div className="muiAvatar">
-              {user.email?.charAt(0).toUpperCase()}
-            </div>
-
-            <Button color="error" onClick={() => navigate("/")}>
-              Logout
-            </Button>
+            <button className="headerSearchBtn" aria-label="search">
+              <SearchIcon fontSize="small" />
+            </button>
+            <button className="headerIconButton messageBtn" aria-label="messages">
+              <ChatIcon fontSize="small" />
+            </button>
+            <button className="headerIconButton notifyBtn" aria-label="notifications">
+              <NotificationsIcon fontSize="small" />
+              <span className="notifBadge">99+</span>
+            </button>
+            <div className="muiAvatar">{user.email?.charAt(0).toUpperCase()}</div>
+            <button className="collapseBtn" aria-label="more options">
+              <ArrowDropDownIcon fontSize="small" />
+            </button>
           </Box>
-
         </Toolbar>
       </AppBar>
 
-      {/* FEED */}
+      <div className="feedTabs">
+        <button className="feedTab active">All</button>
+      </div>
+
       <div className="muiFeed">
-        {demoPins.map(pin => (
-          <div className="muiPin" key={pin.id}>
-            <img src={pin.img} alt="" />
+        {demoPins.map((pin) => (
+          <div className="muiPin" key={pin.id} style={{ height: `${pin.height}px` }}>
+            <img src={pin.img} alt={pin.title} />
             <button className="muiSaveBtn">Save</button>
+            <div className="pinMeta">
+              <span>{pin.category}</span>
+              <button className="pinMoreBtn" aria-label="more options">
+                <MoreHorizIcon fontSize="small" />
+              </button>
+            </div>
           </div>
         ))}
       </div>
-
     </Box>
   );
 }
