@@ -14,6 +14,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
+import logo from "../assets/Slog-removebg-preview.png";
 import "../styles/profile.css";
 
 const demoPins = [
@@ -103,8 +104,20 @@ const demoPins = [
   },
 ];
 
+const recentSearches = [
+  { id: 1, text: "protest", meta: "video", image: "https://images.unsplash.com/photo-1541534401786-2077eed87a74?auto=format&fit=crop&w=400&q=80" },
+  { id: 2, text: "inspiration", meta: "", image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=400&q=80" },
+  { id: 3, text: "freaked out song", meta: "", image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=400&q=80" },
+  { id: 4, text: "motivational Quotes", meta: "", image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=400&q=80" },
+  { id: 5, text: "daily inspiration", meta: "", image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80" },
+  { id: 6, text: "creative ideas", meta: "", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" },
+  { id: 7, text: "aesthetic drawings simple colour", meta: "", image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" },
+  { id: 8, text: "minimalist design", meta: "", image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=400&q=80" },
+];
+
 export default function Profile() {
   const [user, setUser] = useState(null);
+  const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -122,33 +135,53 @@ export default function Profile() {
 
   return (
     <Box className="profilePage">
-      <AppBar position="sticky" color="default" elevation={0} className="profileAppBar">
+      <AppBar
+        position="sticky"
+        color="default"
+        elevation={0}
+        className="profileAppBar"
+      >
         <Toolbar className="muiToolbar">
           <Box className="muiLeft">
-            <div className="muiLogo">P</div>
-            <h2 className="brandName">StylePins</h2>
-          </Box>
-
-          <Box className="topCenterPill">
-            <div className="miniBrand">
-              <div className="miniAvatar">V</div>
-              <span>VibeWear</span>
+            <div className="logo">
+              <img src={logo} alt="StylePins Logo" className="logo-image" />
+              <span>StylePins</span>
             </div>
-            <ArrowDropDownIcon className="pillArrow" />
           </Box>
 
           <Box className="muiRight">
-            <button className="headerSearchBtn" aria-label="search">
+            <div className="miniBrand">
+              <div className="miniAvatar">
+                {user.email?.charAt(0).toUpperCase()}
+              </div>
+              <span>{user.name || user.email?.split("@")[0] || "User"}</span>
+              <ArrowDropDownIcon className="pillArrow" />
+            </div>
+            <button
+              type="button"
+              className="headerSearchBtn"
+              aria-label="search"
+              onClick={() => setSearchOpen((prev) => !prev)}
+            >
               <SearchIcon fontSize="small" />
             </button>
-            <button className="headerIconButton messageBtn" aria-label="messages">
-              <ChatIcon fontSize="small" />
-            </button>
-            <button className="headerIconButton notifyBtn" aria-label="notifications">
+            <button
+              className="headerIconButton notifyBtn"
+              aria-label="notifications"
+            >
               <NotificationsIcon fontSize="small" />
               <span className="notifBadge">99+</span>
             </button>
-            <div className="muiAvatar">{user.email?.charAt(0).toUpperCase()}</div>
+            <button
+              className="headerIconButton messageBtn"
+              aria-label="messages"
+            >
+              <ChatIcon fontSize="small" />
+            </button>
+
+            <div className="muiAvatar">
+              {user.email?.charAt(0).toUpperCase()}
+            </div>
             <button className="collapseBtn" aria-label="more options">
               <ArrowDropDownIcon fontSize="small" />
             </button>
@@ -156,13 +189,63 @@ export default function Profile() {
         </Toolbar>
       </AppBar>
 
+      {searchOpen && (
+        <div className="searchModalBackdrop" onClick={() => setSearchOpen(false)}>
+          <div className="searchModal" onClick={(event) => event.stopPropagation()}>
+            <div className="searchModalHeader">
+              <div className="searchLeftBrand">
+                <div className="searchLogoMark">P</div>
+                <span className="searchBrandName">Pinterest</span>
+                <button type="button" className="searchHeaderToggle">
+                  <span>VibeWear</span>
+                  <ArrowDropDownIcon fontSize="small" />
+                </button>
+              </div>
+
+              <div className="searchInputWrap">
+                <SearchIcon className="searchInputIcon" fontSize="small" />
+                <input type="text" placeholder="Search" readOnly />
+              </div>
+
+              <div className="searchActionIcons">
+                <button type="button" className="miniHeaderBtn" aria-label="notifications">
+                  <NotificationsIcon fontSize="small" />
+                </button>
+                <button type="button" className="miniHeaderBtn" aria-label="messages">
+                  <ChatIcon fontSize="small" />
+                </button>
+                <button type="button" className="miniHeaderBtn" aria-label="more options">
+                  <MoreHorizIcon fontSize="small" />
+                </button>
+                <div className="searchMiniAvatar">M</div>
+              </div>
+            </div>
+
+            <div className="searchModalBody">
+              <h3>Recent searches</h3>
+              <div className="recentSearchGrid">
+                {recentSearches.map((item) => (
+                  <button type="button" key={item.id} className="recentSearchItem">
+                    <img src={item.image} alt={item.text} />
+                    <div className="recentSearchText">
+                      <span>{item.text}</span>
+                      {item.meta ? <small>{item.meta}</small> : null}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="feedTabs">
         <button className="feedTab active">All</button>
       </div>
 
       <div className="muiFeed">
         {demoPins.map((pin) => (
-          <div className="muiPin" key={pin.id} style={{ height: `${pin.height}px` }}>
+          <div className="muiPin" key={pin.id}>
             <img src={pin.img} alt={pin.title} />
             <button className="muiSaveBtn">Save</button>
             <div className="pinMeta">
