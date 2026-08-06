@@ -131,6 +131,32 @@ export default function Profile() {
     setUser(JSON.parse(u));
   }, [navigate]);
 
+  const handleSavePin = (pin) => {
+    try {
+      const existing = JSON.parse(localStorage.getItem("savedPins") || "[]");
+      const alreadySaved = existing.some((item) => item.id === pin.id);
+
+      if (!alreadySaved) {
+        localStorage.setItem(
+          "savedPins",
+          JSON.stringify([
+            ...existing,
+            {
+              id: pin.id,
+              title: pin.title,
+              img: pin.img,
+              category: pin.category,
+            },
+          ])
+        );
+      }
+    } catch (error) {
+      console.error("Failed to save pin:", error);
+    }
+
+    navigate("/saved");
+  };
+
   if (!user) return null;
 
   return (
@@ -150,13 +176,18 @@ export default function Profile() {
           </Box>
 
           <Box className="muiRight">
-            <div className="miniBrand">
+            <button
+              type="button"
+              className="miniBrand"
+              aria-label="Open saved pins"
+              onClick={() => navigate("/saved")}
+            >
               <div className="miniAvatar">
                 {user.email?.charAt(0).toUpperCase()}
               </div>
               <span>{user.name || user.email?.split("@")[0] || "User"}</span>
               <ArrowDropDownIcon className="pillArrow" />
-            </div>
+            </button>
             <button
               type="button"
               className="headerSearchBtn"
@@ -179,9 +210,14 @@ export default function Profile() {
               <ChatIcon fontSize="small" />
             </button>
 
-            <div className="muiAvatar">
+            <button
+              type="button"
+              className="muiAvatar"
+              aria-label="Open saved pins"
+              onClick={() => navigate("/saved")}
+            >
               {user.email?.charAt(0).toUpperCase()}
-            </div>
+            </button>
             <button className="collapseBtn" aria-label="more options">
               <ArrowDropDownIcon fontSize="small" />
             </button>
@@ -247,7 +283,9 @@ export default function Profile() {
         {demoPins.map((pin) => (
           <div className="muiPin" key={pin.id}>
             <img src={pin.img} alt={pin.title} />
-            <button className="muiSaveBtn">Save</button>
+            <button className="muiSaveBtn" onClick={() => handleSavePin(pin)}>
+              Save
+            </button>
             <div className="pinMeta">
               <span>{pin.category}</span>
               <button className="pinMoreBtn" aria-label="more options">
