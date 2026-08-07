@@ -9,6 +9,8 @@ import ResetPassword from "./pages/ResetPassword";
 import SetPassword from "./pages/SetPassword";
 import EmailSent from "./pages/EmailSent";
 import Profile from "./pages/Profile";
+import SavePins from "./pages/SavePins";
+import EditProfile from "./pages/EditProfile";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 function AppContent() {
@@ -17,11 +19,13 @@ function AppContent() {
 
   const location = useLocation();
 
-  // hide main navbar on auth/reset pages
+  // hide main navbar on auth/reset/settings pages
   const hideNavbar =
     location.pathname.startsWith("/reset-password") ||
     location.pathname === "/email-sent" ||
-    location.pathname === "/profile";
+    location.pathname === "/profile" ||
+    location.pathname === "/saved" ||
+    location.pathname.startsWith("/settings");
 
   return (
     <>
@@ -101,6 +105,24 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/saved"
+          element={
+            <ProtectedRoute>
+              <SavePins />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/settings/edit-profile"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
             </ProtectedRoute>
           }
         />
