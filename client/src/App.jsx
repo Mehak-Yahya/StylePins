@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 
 import Navbar from "./pages/Navbar";
 import Hero from "./pages/Hero";
@@ -8,9 +13,16 @@ import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import SetPassword from "./pages/SetPassword";
 import EmailSent from "./pages/EmailSent";
+
 import Profile from "./pages/Profile";
+import PublicProfile from "./pages/PublicProfile";
+
 import SavePins from "./pages/SavePins";
 import EditProfile from "./pages/EditProfile";
+import CreatePin from "./pages/CreatePin";
+import CreateBoard from "./pages/CreateBoard";
+import CreateCollage from "./pages/CreateCollage";
+
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 function AppContent() {
@@ -19,17 +31,23 @@ function AppContent() {
 
   const location = useLocation();
 
-  // hide main navbar on auth/reset/settings pages
+  // =====================================================
+  // HIDE MAIN NAVBAR
+  // =====================================================
+
   const hideNavbar =
     location.pathname.startsWith("/reset-password") ||
     location.pathname === "/email-sent" ||
-    location.pathname === "/profile" ||
+    location.pathname.startsWith("/profile") ||
     location.pathname === "/saved" ||
     location.pathname.startsWith("/settings");
 
   return (
     <>
-      {/* MAIN NAVBAR */}
+      {/* =====================================================
+          MAIN NAVBAR
+      ===================================================== */}
+
       {!hideNavbar && (
         <Navbar
           openSignup={() => setShowSignup(true)}
@@ -37,7 +55,10 @@ function AppContent() {
         />
       )}
 
-      {/* MODALS */}
+      {/* =====================================================
+          SIGNUP MODAL
+      ===================================================== */}
+
       {showSignup && (
         <Signup
           onClose={() => setShowSignup(false)}
@@ -48,6 +69,10 @@ function AppContent() {
         />
       )}
 
+      {/* =====================================================
+          LOGIN MODAL
+      ===================================================== */}
+
       {showLogin && (
         <Login
           onClose={() => setShowLogin(false)}
@@ -57,8 +82,16 @@ function AppContent() {
           }}
         />
       )}
-      {/* ROUTES */}
+
+      {/* =====================================================
+          ROUTES
+      ===================================================== */}
+
       <Routes>
+        {/* =================================================
+            HOME
+        ================================================= */}
+
         <Route
           path="/"
           element={
@@ -69,7 +102,10 @@ function AppContent() {
           }
         />
 
-        {/* IMPORTANT: PASS LOGIN/SIGNUP TO RESET FLOW PAGES */}
+        {/* =================================================
+            RESET PASSWORD
+        ================================================= */}
+
         <Route
           path="/reset-password"
           element={
@@ -79,6 +115,10 @@ function AppContent() {
             />
           }
         />
+
+        {/* =================================================
+            EMAIL SENT
+        ================================================= */}
 
         <Route
           path="/email-sent"
@@ -90,6 +130,10 @@ function AppContent() {
           }
         />
 
+        {/* =================================================
+            SET PASSWORD
+        ================================================= */}
+
         <Route
           path="/reset-password/:token"
           element={
@@ -100,6 +144,12 @@ function AppContent() {
           }
         />
 
+        {/* =================================================
+            MY PROFILE
+
+            /profile
+        ================================================= */}
+
         <Route
           path="/profile"
           element={
@@ -108,6 +158,28 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+
+        {/* =================================================
+            OTHER USER PUBLIC PROFILE
+
+            /profile/:userId
+
+            Example:
+            /profile/6a737601af4c2e30c0a73cd4
+        ================================================= */}
+
+        <Route
+          path="/profile/:userId"
+          element={
+            <ProtectedRoute>
+              <PublicProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            SAVED PINS
+        ================================================= */}
 
         <Route
           path="/saved"
@@ -118,11 +190,54 @@ function AppContent() {
           }
         />
 
+        {/* =================================================
+            EDIT PROFILE
+        ================================================= */}
+
         <Route
           path="/settings/edit-profile"
           element={
             <ProtectedRoute>
               <EditProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            CREATE PIN
+        ================================================= */}
+
+        <Route
+          path="/create-pin"
+          element={
+            <ProtectedRoute>
+              <CreatePin />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            CREATE BOARD
+        ================================================= */}
+
+        <Route
+          path="/create-board"
+          element={
+            <ProtectedRoute>
+              <CreateBoard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* =================================================
+            CREATE COLLAGE
+        ================================================= */}
+
+        <Route
+          path="/create-collage"
+          element={
+            <ProtectedRoute>
+              <CreateCollage />
             </ProtectedRoute>
           }
         />
