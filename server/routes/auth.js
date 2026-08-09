@@ -61,11 +61,16 @@ router.post("/google-login", async (req, res) => {
         name,
         email,
         photo,
-        googleId: uid
+        googleId: uid,
       });
+    } else if (!user.photo && photo) {
+      user.photo = photo;
+      await user.save();
     }
 
-    res.status(200).json(user);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
+    res.status(200).json({ token, user });
   } catch (err) {
     console.log("Google login error:", err);
     res.status(500).json({ message: err.message });
