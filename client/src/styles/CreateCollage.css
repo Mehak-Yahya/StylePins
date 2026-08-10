@@ -1,0 +1,2252 @@
+/* =====================================================
+   CREATE COLLAGE PAGE
+===================================================== */
+
+.collage-page {
+  width: 100%;
+  height: 100vh;
+
+  background: #fff;
+
+  color: #111;
+
+  font-family:
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+
+/* =====================================================
+   TOP NAVBAR
+===================================================== */
+
+.collage-navbar {
+  width: 100%;
+  height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 18px 0 26px;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border-bottom: 1px solid #eee;
+
+  flex-shrink: 0;
+}
+
+
+/* LEFT */
+
+.collage-navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.collage-logo {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.collage-logo img {
+  width: 24px;
+  height: 24px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+.collage-logo span {
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: #111;
+}
+
+.collage-brand-menu {
+  color: #555 !important;
+
+  font-size: 17px !important;
+
+  font-weight: 500 !important;
+
+  margin-left: -2px;
+}
+
+
+/* RIGHT */
+
+.collage-navbar-right {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  height: 100%;
+}
+
+
+/* PROFILE PILL */
+
+.collage-profile-pill {
+  height: 48px;
+
+  min-width: 176px;
+
+  padding: 4px 10px 4px 6px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  border: 1px solid #d5d5d5;
+
+  border-radius: 999px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+}
+
+.collage-profile-pill:hover {
+  background: #f6f6f6;
+}
+
+.collage-profile-avatar {
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background: #ddd;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 11px;
+
+  flex-shrink: 0;
+}
+
+.collage-profile-avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.collage-profile-text {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  line-height: 1.1;
+
+  flex: 1;
+}
+
+.collage-profile-text span {
+  color: #555;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.collage-profile-text strong {
+  color: #111;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.collage-profile-arrow {
+  font-size: 20px;
+
+  color: #555;
+}
+
+
+/* NAV ICON */
+
+.collage-nav-icon {
+  width: 40px;
+  height: 40px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #555;
+
+  cursor: pointer;
+
+  font-size: 19px;
+
+  position: relative;
+
+  padding: 0;
+}
+
+.collage-nav-icon:hover {
+  background: #f2f2f2;
+}
+
+.collage-nav-icon svg {
+  width: 23px;
+  height: 23px;
+}
+
+.notification-icon {
+  font-size: 20px;
+}
+
+.notification-number {
+  position: absolute;
+
+  top: 1px;
+  right: 1px;
+
+  width: 16px;
+  height: 16px;
+
+  border-radius: 50%;
+
+  background: #e60023;
+
+  color: #fff;
+
+  font-size: 10px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+
+  border: 2px solid #fff;
+}
+
+.collage-small-avatar {
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  background: #ddd;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #555;
+
+  font-size: 12px;
+
+  overflow: hidden;
+}
+
+.nav-chevron {
+  font-size: 23px;
+
+  color: #555;
+}
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.collage-toolbar {
+  height: 76px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 24px 0 20px;
+
+  background: #fff;
+
+  flex-shrink: 0;
+
+  box-sizing: border-box;
+}
+
+
+/* LEFT */
+
+.collage-toolbar-left {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  min-width: 230px;
+}
+
+.collage-close-button {
+  width: 40px;
+  height: 40px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+.collage-close-button:hover {
+  background: #f2f2f2;
+}
+
+.collage-close-button svg {
+  width: 25px;
+  height: 25px;
+}
+
+.collage-toolbar h1 {
+  margin: 0;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  color: #111;
+}
+
+
+/* CENTER */
+
+.collage-toolbar-center {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  flex: 1;
+}
+
+.toolbar-icon-button {
+  width: 40px;
+  height: 40px;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  color: #777;
+
+  padding: 0;
+}
+
+.toolbar-icon-button:hover:not(:disabled) {
+  background: #f3f3f3;
+
+  color: #111;
+}
+
+.toolbar-icon-button:disabled {
+  opacity: 0.45;
+
+  cursor: default;
+}
+
+.toolbar-icon-button svg {
+  width: 22px;
+  height: 22px;
+}
+
+
+/* NEXT */
+
+.next-button {
+  height: 42px;
+
+  min-width: 76px;
+
+  padding: 0 16px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: #e60023;
+
+  color: #fff;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 4px;
+
+  cursor: pointer;
+}
+
+.next-button svg {
+  width: 17px;
+  height: 17px;
+}
+
+.next-button:hover:not(:disabled) {
+  background: #c9001e;
+}
+
+.next-button.disabled,
+.next-button:disabled {
+  background: #e8e8e8;
+
+  color: #aaa;
+
+  cursor: default;
+}
+
+
+/* =====================================================
+   WORKSPACE
+===================================================== */
+
+.collage-workspace {
+  flex: 1;
+
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    220px
+    minmax(450px, 1fr)
+    550px;
+
+  background: #fff;
+
+  border-top: 1px solid #eee;
+}
+
+
+/* =====================================================
+   LEFT PANEL
+===================================================== */
+
+.collage-left-panel {
+  border-right: 1px solid #eee;
+
+  background: #fff;
+
+  overflow-y: auto;
+
+  padding: 24px 16px;
+
+  box-sizing: border-box;
+}
+
+.cutouts-heading h2 {
+  margin: 0 0 6px;
+
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+.cutouts-heading p {
+  margin: 0;
+
+  font-size: 11px;
+
+  line-height: 1.35;
+
+  color: #555;
+
+  max-width: 155px;
+}
+
+.cutouts-list {
+  margin-top: 22px;
+}
+
+.background-row {
+  height: 46px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: #222;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.background-row > svg {
+  width: 16px;
+  height: 16px;
+
+  color: #666;
+}
+
+.background-preview {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 6px;
+
+  background:
+    radial-gradient(
+      #ccc 1px,
+      transparent 1px
+    );
+
+  background-size: 8px 8px;
+
+  background-color: #fafafa;
+
+  border: 1px solid #eee;
+
+  flex-shrink: 0;
+}
+
+.cutout-row {
+  min-height: 58px;
+
+  margin-top: 6px;
+
+  border-radius: 10px;
+
+  padding: 5px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+.cutout-row:hover {
+  background: #f3f3f3;
+}
+
+.cutout-row.selected {
+  background: #eee;
+}
+
+.cutout-row img {
+  width: 45px;
+  height: 45px;
+
+  object-fit: cover;
+
+  border-radius: 7px;
+}
+
+.cutout-row span {
+  min-width: 0;
+
+  font-size: 11px;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   CENTER EDITOR
+===================================================== */
+
+.collage-editor {
+  min-width: 0;
+
+  position: relative;
+
+  background: #fff;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.collage-canvas-wrapper {
+  flex: 1;
+
+  min-height: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+
+  padding: 18px;
+
+  box-sizing: border-box;
+}
+
+.collage-canvas {
+  width: 330px;
+
+  height: 410px;
+
+  max-width: 80%;
+
+  max-height: 85%;
+
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background-color: #fafafa;
+
+  background-image:
+    radial-gradient(
+      #d2d2d2 1px,
+      transparent 1px
+    );
+
+  background-size: 12px 12px;
+
+  border: 1px solid #eee;
+
+  box-shadow:
+    0 3px 15px
+    rgba(0, 0, 0, 0.04);
+}
+
+
+/* EMPTY */
+
+.empty-canvas-hint {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  color: #aaa;
+
+  text-align: center;
+
+  padding: 50px;
+
+  pointer-events: none;
+}
+
+.empty-canvas-hint svg {
+  width: 35px;
+  height: 35px;
+
+  opacity: 0.45;
+}
+
+.empty-canvas-hint span {
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+
+/* COLLAGE IMAGE */
+
+.collage-image-item {
+  position: absolute;
+
+  max-width: 75%;
+
+  max-height: 75%;
+
+  cursor: pointer;
+
+  border-radius: 12px;
+
+  overflow: visible;
+
+  z-index: 2;
+}
+
+.collage-image-item img {
+  width: 100%;
+  height: auto;
+
+  display: block;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 5px 18px
+    rgba(0, 0, 0, 0.15);
+}
+
+.collage-image-item.selected {
+  z-index: 10;
+}
+
+.selection-outline {
+  position: absolute;
+
+  inset: -5px;
+
+  border: 2px solid #4c9aff;
+
+  border-radius: 14px;
+
+  pointer-events: none;
+}
+
+.resize-handle {
+  position: absolute;
+
+  width: 8px;
+  height: 8px;
+
+  background: #fff;
+
+  border: 2px solid #4c9aff;
+
+  border-radius: 50%;
+}
+
+.top-left {
+  top: -5px;
+  left: -5px;
+}
+
+.top-right {
+  top: -5px;
+  right: -5px;
+}
+
+.bottom-left {
+  bottom: -5px;
+  left: -5px;
+}
+
+.bottom-right {
+  bottom: -5px;
+  right: -5px;
+}
+
+
+/* TEXT */
+
+.collage-text-item {
+  position: absolute;
+
+  transform:
+    translate(-50%, -50%);
+
+  font-size: 25px;
+
+  font-weight: 800;
+
+  color: #111;
+
+  padding: 8px 12px;
+
+  cursor: pointer;
+
+  z-index: 20;
+}
+
+.collage-text-item.selected {
+  outline: 2px solid #4c9aff;
+
+  border-radius: 5px;
+}
+
+
+/* =====================================================
+   BOTTOM EDITOR TOOLS
+===================================================== */
+
+.collage-bottom-tools {
+  height: 64px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 25px;
+
+  flex-shrink: 0;
+
+  background: #fff;
+
+  border-top: 1px solid #eee;
+}
+
+.editor-tool {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 8px;
+
+  color: #666;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+.editor-tool:hover:not(:disabled) {
+  background: #f1f1f1;
+
+  color: #111;
+}
+
+.editor-tool:disabled {
+  opacity: 0.45;
+
+  cursor: default;
+}
+
+.editor-tool svg {
+  width: 22px;
+  height: 22px;
+}
+
+.delete-tool:hover:not(:disabled) {
+  color: #e60023;
+}
+
+
+/* =====================================================
+   RIGHT PANEL
+===================================================== */
+
+.collage-right-panel {
+  min-width: 0;
+
+  border-left: 1px solid #eee;
+
+  background: #fff;
+
+  padding: 18px 16px 0;
+
+  box-sizing: border-box;
+
+  overflow-y: auto;
+}
+
+
+/* SEARCH */
+
+.collage-search-box {
+  width: 100%;
+
+  height: 40px;
+
+  border-radius: 10px;
+
+  background: #e9e9e6;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  gap: 7px;
+}
+
+.collage-search-box svg {
+  width: 18px;
+  height: 18px;
+
+  color: #555;
+
+  flex-shrink: 0;
+}
+
+.collage-search-box input {
+  flex: 1;
+
+  min-width: 0;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #111;
+
+  font-size: 13px;
+
+  font-family: inherit;
+}
+
+.collage-search-box input::placeholder {
+  color: #666;
+}
+
+.collage-search-box button {
+  width: 26px;
+  height: 26px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.collage-search-box button:hover {
+  background: #d8d8d5;
+}
+
+.collage-search-box button svg {
+  width: 16px;
+  height: 16px;
+}
+
+
+/* =====================================================
+   TABS
+===================================================== */
+
+.collage-tabs {
+  height: 54px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  gap: 22px;
+
+  overflow-x: auto;
+
+  border-bottom: 1px solid transparent;
+}
+
+.collage-tabs button {
+  height: 42px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #111;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  position: relative;
+}
+
+.collage-tabs button.active {
+  font-weight: 700;
+}
+
+.collage-tabs button.active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  bottom: 0;
+
+  height: 2px;
+
+  background: #111;
+}
+
+
+/* =====================================================
+   PIN GRID
+===================================================== */
+
+.collage-pin-grid {
+  padding: 16px 4px 30px;
+
+  column-count: 3;
+
+  column-gap: 9px;
+}
+
+.collage-pin {
+  width: 100%;
+
+  display: block;
+
+  border: none;
+
+  padding: 0;
+
+  margin: 0 0 9px;
+
+  background: transparent;
+
+  border-radius: 11px;
+
+  overflow: hidden;
+
+  position: relative;
+
+  cursor: pointer;
+
+  break-inside: avoid;
+}
+
+.collage-pin img {
+  width: 100%;
+
+  height: auto;
+
+  display: block;
+
+  object-fit: cover;
+
+  border-radius: 11px;
+
+  transition:
+    transform 0.18s ease;
+}
+
+.collage-pin:hover img {
+  transform: scale(1.025);
+}
+
+.pin-add-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    rgba(0, 0, 0, 0.25);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.15s ease;
+}
+
+.collage-pin:hover .pin-add-overlay {
+  opacity: 1;
+}
+
+.pin-add-overlay span {
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  color: #111;
+
+  font-size: 25px;
+
+  line-height: 32px;
+
+  font-weight: 400;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* =====================================================
+   EMPTY STATES
+===================================================== */
+
+.no-collage-pins {
+  column-span: all;
+
+  min-height: 250px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-direction: column;
+
+  text-align: center;
+
+  color: #777;
+
+  padding: 30px;
+}
+
+.no-collage-pins svg {
+  width: 40px;
+  height: 40px;
+
+  margin-bottom: 10px;
+
+  color: #aaa;
+}
+
+.no-collage-pins p {
+  margin: 0 0 5px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #333;
+}
+
+.no-collage-pins span {
+  font-size: 12px;
+
+  line-height: 1.4;
+}
+
+.empty-side-tab {
+  min-height: 300px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-direction: column;
+
+  text-align: center;
+
+  gap: 7px;
+
+  color: #777;
+}
+
+.empty-side-tab svg {
+  width: 40px;
+  height: 40px;
+
+  color: #aaa;
+}
+
+.empty-side-tab strong {
+  color: #333;
+
+  font-size: 14px;
+}
+
+.empty-side-tab span {
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   SCROLLBARS
+===================================================== */
+
+.collage-left-panel::-webkit-scrollbar,
+.collage-right-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.collage-left-panel::-webkit-scrollbar-track,
+.collage-right-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.collage-left-panel::-webkit-scrollbar-thumb,
+.collage-right-panel::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+
+  border-radius: 10px;
+}
+
+.collage-left-panel::-webkit-scrollbar-thumb:hover,
+.collage-right-panel::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1200px) {
+
+  .collage-workspace {
+    grid-template-columns:
+      190px
+      minmax(350px, 1fr)
+      430px;
+  }
+
+  .collage-pin-grid {
+    column-count: 3;
+  }
+
+  .collage-profile-pill {
+    min-width: 150px;
+  }
+}
+
+
+@media (max-width: 950px) {
+
+  .collage-workspace {
+    grid-template-columns:
+      170px
+      minmax(300px, 1fr)
+      350px;
+  }
+
+  .collage-navbar-right
+    .collage-nav-icon:nth-of-type(4) {
+    display: none;
+  }
+
+  .collage-profile-pill {
+    min-width: 135px;
+  }
+
+  .collage-profile-text {
+    display: none;
+  }
+}
+
+
+@media (max-width: 760px) {
+
+  .collage-workspace {
+    grid-template-columns:
+      150px
+      minmax(280px, 1fr);
+  }
+
+  .collage-right-panel {
+    display: none;
+  }
+
+  .collage-toolbar {
+    padding-right: 12px;
+  }
+
+  .collage-toolbar-center {
+    justify-content: flex-end;
+  }
+
+  .collage-navbar {
+    padding-left: 15px;
+  }
+
+  .collage-profile-pill {
+    min-width: auto;
+  }
+
+  .collage-profile-text {
+    display: none;
+  }
+
+  .collage-logo span {
+    display: none;
+  }
+}
+
+
+@media (max-width: 560px) {
+
+  .collage-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .collage-left-panel {
+    display: none;
+  }
+
+  .collage-navbar {
+    height: 58px;
+  }
+
+  .collage-toolbar {
+    height: 64px;
+  }
+
+  .collage-toolbar-left {
+    min-width: auto;
+  }
+
+  .collage-toolbar h1 {
+    font-size: 15px;
+  }
+
+  .collage-toolbar-center {
+    display: none;
+  }
+
+  .collage-canvas {
+    width: 280px;
+    height: 360px;
+  }
+
+  .collage-bottom-tools {
+    height: 58px;
+
+    gap: 18px;
+  }
+
+  .collage-profile-pill {
+    display: none;
+  }
+
+  .collage-navbar-right {
+    gap: 2px;
+  }
+}
+/* =====================================================
+   CREATE COLLAGE NAVBAR
+===================================================== */
+
+.createCollagePage {
+  min-height: 100vh;
+  background: #f8f8f8;
+  color: #111;
+}
+
+.collage-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1400;
+
+  width: 100%;
+  min-height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 22px;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border-top: 2px solid #333;
+
+  box-shadow: none;
+}
+
+.collage-navbar-left {
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+}
+
+.collage-logo {
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  color: #e60023;
+}
+
+.collage-logo img {
+  width: 34px;
+  height: 34px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+.collage-logo span:not(.collage-brand-menu) {
+  font-size: 23px;
+  font-weight: 800;
+
+  letter-spacing: -0.06em;
+}
+
+.collage-brand-menu {
+  color: #555;
+
+  font-size: 17px;
+
+  margin-left: 2px;
+}
+
+/* =====================================================
+   RIGHT NAV
+===================================================== */
+
+.collage-navbar-right {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 7px;
+
+  min-width: 0;
+}
+
+.collage-profile-pill {
+  height: 46px;
+
+  max-width: 235px;
+
+  border: 1px solid #d2d2d2;
+
+  border-radius: 999px;
+
+  background: #fff;
+
+  padding: 6px 11px 6px 7px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  cursor: pointer;
+
+  color: #111;
+
+  font-family: inherit;
+
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.collage-profile-pill:hover {
+  background: #f7f7f7;
+}
+
+.collage-profile-avatar {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    #d6c5e5,
+    #a7a3b5
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.collage-profile-avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.collage-profile-text {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  line-height: 1.15;
+}
+
+.collage-profile-text span {
+  max-width: 130px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.collage-profile-text strong {
+  max-width: 150px;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  color: #777;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.collage-nav-icon {
+  position: relative;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 50%;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #555;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+
+.collage-nav-icon:hover {
+  background: #f1f1f1;
+}
+
+.collage-nav-icon:active {
+  transform: scale(0.94);
+}
+
+.collage-nav-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.notification-icon {
+  overflow: visible;
+}
+
+.notification-number {
+  position: absolute;
+
+  top: -2px;
+  right: -1px;
+
+  min-width: 17px;
+  height: 17px;
+
+  padding: 0 4px;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e60023;
+
+  color: #fff;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  border: 2px solid #fff;
+}
+
+.collage-small-avatar {
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background: linear-gradient(
+    135deg,
+    #d5d5d5,
+    #a9a9a9
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #111;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+}
+
+.collage-small-avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+/* =====================================================
+   MORE MENU
+===================================================== */
+
+.collage-more-menu {
+  position: absolute;
+
+  top: calc(100% + 8px);
+  right: 0;
+
+  width: 190px;
+
+  padding: 7px;
+
+  background: #fff;
+
+  border: 1px solid #e5e5e5;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.14);
+
+  z-index: 1600;
+}
+
+.collage-more-menu button {
+  width: 100%;
+
+  border: none;
+
+  background: transparent;
+
+  padding: 11px 13px;
+
+  border-radius: 9px;
+
+  text-align: left;
+
+  color: #111;
+
+  font-family: inherit;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.collage-more-menu button:hover {
+  background: #f3f3f3;
+}
+
+/* =====================================================
+   SEARCH OVERLAY
+===================================================== */
+
+.collage-search-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1550;
+
+  background: rgba(0, 0, 0, 0.38);
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.collage-search-panel {
+  width: min(800px, calc(100vw - 30px));
+
+  margin-top: 70px;
+
+  background: #fff;
+
+  border-radius: 0 0 18px 18px;
+
+  padding: 18px 25px 25px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.collage-expanded-search {
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 0 8px 0 13px;
+
+  box-sizing: border-box;
+
+  background: #f5f5f5;
+
+  border: 2px solid #8bc7ff;
+
+  border-radius: 26px;
+}
+
+.collage-expanded-search > svg {
+  color: #555;
+
+  flex-shrink: 0;
+}
+
+.collage-expanded-search input {
+  flex: 1;
+
+  min-width: 0;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #111;
+
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.collage-expanded-search button {
+  width: 34px;
+  height: 34px;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  color: #444;
+}
+
+.collage-expanded-search button:hover {
+  background: #e7e7e7;
+}
+
+.collage-expanded-search button svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* =====================================================
+   SEARCH RESULTS
+===================================================== */
+
+.collage-search-results {
+  margin-top: 20px;
+
+  max-height: 500px;
+
+  overflow-y: auto;
+}
+
+.collage-search-results h3 {
+  margin: 0 0 13px;
+
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.collage-search-user {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 10px;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 12px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  font-family: inherit;
+}
+
+.collage-search-user:hover {
+  background: #f3f3f3;
+}
+
+.collage-search-user-avatar {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background: #e9e9e9;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #333;
+
+  font-weight: 700;
+}
+
+.collage-search-user-avatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.collage-search-user > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.collage-search-user strong {
+  color: #111;
+
+  font-size: 14px;
+}
+
+.collage-search-user span {
+  color: #777;
+
+  font-size: 12px;
+}
+
+.collage-search-user small {
+  max-width: 500px;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: #777;
+
+  font-size: 12px;
+}
+
+.collage-search-message,
+.collage-search-empty {
+  padding: 35px 10px;
+
+  text-align: center;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+/* =====================================================
+   NOTIFICATIONS
+===================================================== */
+
+.notifications-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.2);
+
+  z-index: 1700;
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+.notifications-drawer {
+  width: 390px;
+
+  max-width: 90vw;
+
+  height: 100vh;
+
+  box-sizing: border-box;
+
+  padding: 18px;
+
+  background: #fff;
+
+  box-shadow:
+    -5px 0 20px rgba(0, 0, 0, 0.12);
+
+  overflow-y: auto;
+}
+
+.notifications-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 25px;
+}
+
+.notifications-title-wrapper {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.notifications-dot {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #e60023;
+}
+
+.notifications-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.notifications-close {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+}
+
+.notifications-close:hover {
+  background: #f1f1f1;
+}
+
+.notifications-updates {
+  margin-bottom: 12px;
+
+  color: #777;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.notification-row {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 10px;
+
+  border-radius: 12px;
+}
+
+.notification-row:hover {
+  background: #f6f6f6;
+}
+
+.notification-thumb {
+  width: 54px;
+  height: 54px;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+
+  flex-shrink: 0;
+}
+
+.notification-body {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.notification-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.notification-subtitle {
+  margin-top: 3px;
+
+  color: #777;
+
+  font-size: 13px;
+}
+
+.notification-meta {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  color: #777;
+
+  font-size: 12px;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+  .collage-profile-text {
+    display: none;
+  }
+
+  .collage-profile-pill {
+    width: 47px;
+
+    justify-content: center;
+
+    padding: 6px;
+  }
+
+  .collage-profile-pill > svg {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .collage-navbar {
+    padding: 9px 12px;
+  }
+
+  .collage-logo span:not(.collage-brand-menu) {
+    display: none;
+  }
+
+  .collage-navbar-right {
+    gap: 2px;
+  }
+
+  .collage-nav-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .collage-small-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .collage-profile-pill {
+    width: 40px;
+    height: 40px;
+  }
+
+  .collage-search-panel {
+    width: 100%;
+
+    margin-top: 60px;
+
+    border-radius: 0 0 16px 16px;
+
+    padding: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .collage-navbar-right
+    .collage-nav-icon:nth-of-type(4) {
+    display: none;
+  }
+
+  .notifications-drawer {
+    width: 100%;
+    max-width: 100%;
+  }
+}

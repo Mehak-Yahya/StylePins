@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -19,10 +19,18 @@ import logo from "../assets/Slog-removebg-preview.png";
 import {
   loadUserProfileMeta,
   savePinForUser,
+  saveUserProfileMeta,
 } from "../utils/userStorage";
 
 import "../styles/profile.css";
 import InboxPanel from "../components/InboxPanel";
+
+const API_URL = "http://localhost:5000/api";
+const IMAGE_BASE_URL = "http://localhost:5000";
+
+// =====================================================
+// DEMO PINS
+// =====================================================
 
 const demoPins = [
   {
@@ -99,6 +107,10 @@ const demoPins = [
   },
 ];
 
+// =====================================================
+// RECENT SEARCHES
+// =====================================================
+
 const recentSearches = [
   {
     id: 1,
@@ -159,80 +171,442 @@ const recentSearches = [
 ];
 
 export default function Profile() {
+  const navigate = useNavigate();
+  const { userId } = useParams();
+
+  // =====================================================
+  // STATE
+  // =====================================================
+
   const [user, setUser] = useState(null);
   const [userMeta, setUserMeta] = useState(null);
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [searchUsers, setSearchUsers] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
 
-  const navigate = useNavigate();
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+
+  // ALL CREATED PINS FROM ALL USERS
+  const [createdPins, setCreatedPins] = useState([]);
+
+  const profileUserId = userId || user?._id || user?.id;
+
+  // =====================================================
+  // LOAD PROFILE
+  // =====================================================
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    let cancelled = false;
 
-    if (!storedUser || storedUser === "undefined") {
-      navigate("/");
+    const loadProfile = async () => {
+      try {
+        // =================================================
+        // VIEWING ANOTHER USER
+        // /profile/:userId
+        // =================================================
+
+        if (userId) {
+          const response = await fetch(
+            `${API_URL}/users/${userId}`
+          );
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(
+              data.message || "Failed to load profile"
+            );
+          }
+
+          if (cancelled) return;
+
+          const publicUser = data.user || data;
+
+          setUser(publicUser);
+
+          setUserMeta({
+            dp:
+              publicUser.photo ||
+              publicUser.profilePicture ||
+              publicUser.avatar ||
+              "",
+            username: publicUser.username || "",
+            bio: publicUser.bio || "",
+            followers: data.followersCount || 0,
+            following: data.followingCount || 0,
+            monthlyViews: data.profileViews || 0,
+            tags: [],
+          });
+
+          return;
+        }
+
+        // =================================================
+        // LOGGED-IN USER
+        // /profile
+        // =================================================
+
+        const storedUser = localStorage.getItem("user");
+
+        if (
+          !storedUser ||
+          storedUser === "undefined" ||
+          storedUser === "null"
+        ) {
+          navigate("/");
+          return;
+        }
+
+        const parsedUser = JSON.parse(storedUser);
+
+        if (!parsedUser) {
+          navigate("/");
+          return;
+        }
+
+        if (cancelled) return;
+
+        setUser(parsedUser);
+
+        const meta = loadUserProfileMeta(parsedUser);
+
+        let syncedMeta = meta || {};
+
+        try {
+          const loggedUserId =
+            parsedUser._id || parsedUser.id;
+
+          if (loggedUserId) {
+            const response = await fetch(
+              `${API_URL}/users/${loggedUserId}`
+            );
+
+            if (response.ok) {
+              const data = await response.json();
+
+              syncedMeta = {
+                ...meta,
+                followers:
+                  data.followersCount || 0,
+                following:
+                  data.followingCount || 0,
+                monthlyViews:
+                  data.profileViews || 0,
+              };
+            }
+          }
+        } catch (countError) {
+          console.error(
+            "Failed to refresh profile counts:",
+            countError
+          );
+        }
+
+        saveUserProfileMeta(
+          parsedUser,
+          syncedMeta
+        );
+
+        setUserMeta(syncedMeta);
+      } catch (error) {
+        console.error(
+          "Failed to load profile:",
+          error
+        );
+
+        if (!cancelled) {
+          if (userId) {
+            navigate("/profile");
+          } else {
+            navigate("/");
+          }
+        }
+      }
+    };
+
+    loadProfile();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate, userId]);
+
+  // =====================================================
+  // LOAD ALL CREATED PINS
+  //
+  // IMPORTANT:
+  // We use /api/pins
+  // NOT /api/pins/user/:userId
+  //
+  // This means EVERY HOME can see EVERYONE'S pins.
+  // =====================================================
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadAllCreatedPins = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/pins`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || "Failed to load pins"
+          );
+        }
+
+        const loadedPins = Array.isArray(data)
+          ? data
+          : Array.isArray(data.pins)
+          ? data.pins
+          : [];
+
+        if (!cancelled) {
+          setCreatedPins(loadedPins);
+        }
+      } catch (error) {
+        console.error(
+          "Failed to load all created pins:",
+          error
+        );
+
+        if (!cancelled) {
+          setCreatedPins([]);
+        }
+      }
+    };
+
+    loadAllCreatedPins();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // =====================================================
+  // RECORD PROFILE VIEW
+  // =====================================================
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const storedUser =
+      localStorage.getItem("user");
+
+    let viewerId = null;
+
+    try {
+      if (
+        storedUser &&
+        storedUser !== "undefined" &&
+        storedUser !== "null"
+      ) {
+        const loggedUser =
+          JSON.parse(storedUser);
+
+        viewerId =
+          loggedUser?._id ||
+          loggedUser?.id ||
+          null;
+      }
+    } catch (error) {
+      console.error(
+        "Failed to read viewer:",
+        error
+      );
+    }
+
+    fetch(
+      `${API_URL}/users/${userId}/view`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          viewerId,
+        }),
+      }
+    ).catch((error) => {
+      console.error(
+        "Failed to record profile view:",
+        error
+      );
+    });
+  }, [userId]);
+
+  // =====================================================
+  // SEARCH USERS
+  // =====================================================
+
+  const searchRealUsers = async (query) => {
+    const trimmedQuery = query.trim();
+
+    if (!trimmedQuery) {
+      setSearchUsers([]);
+      setSearchLoading(false);
       return;
     }
 
     try {
-      const parsedUser = JSON.parse(storedUser);
+      setSearchLoading(true);
 
-      setUser(parsedUser);
+      const response = await fetch(
+        `${API_URL}/users/search?q=${encodeURIComponent(
+          trimmedQuery
+        )}`
+      );
 
-      const meta = loadUserProfileMeta(parsedUser);
-      setUserMeta(meta);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to search users"
+        );
+      }
+
+      let users = [];
+
+      if (Array.isArray(data)) {
+        users = data;
+      } else if (Array.isArray(data.users)) {
+        users = data.users;
+      } else if (Array.isArray(data.data)) {
+        users = data.data;
+      }
+
+      setSearchUsers(users);
     } catch (error) {
-      console.error("Failed to load user:", error);
-      navigate("/");
-    }
-  }, [navigate]);
+      console.error(
+        "User search error:",
+        error
+      );
 
-  /*
-   * SAVE PIN
-   *
-   * IMPORTANT:
-   * Do NOT use localStorage.getItem("savedPins") here.
-   *
-   * savePinForUser() creates a user-specific storage key:
-   *
-   * savedPins_user@email.com
-   */
+      setSearchUsers([]);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  // =====================================================
+  // SEARCH DEBOUNCE
+  // =====================================================
+
+  useEffect(() => {
+    if (!searchOpen) return;
+
+    const timer = setTimeout(() => {
+      searchRealUsers(searchValue);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchValue, searchOpen]);
+
+  // =====================================================
+  // SAVE PIN
+  // =====================================================
+
   const handleSavePin = (pin) => {
     try {
       savePinForUser(user, pin);
-
       navigate("/saved");
     } catch (error) {
-      console.error("Failed to save pin:", error);
+      console.error(
+        "Failed to save pin:",
+        error
+      );
     }
   };
+
+  // =====================================================
+  // OPEN SEARCH
+  // =====================================================
 
   const openSearch = () => {
     setSearchOpen(true);
     setNotificationsOpen(false);
+    closeAccountMenu();
+    setSearchValue("");
+    setSearchUsers([]);
   };
+
+  // =====================================================
+  // CLOSE SEARCH
+  // =====================================================
 
   const closeSearch = () => {
     setSearchOpen(false);
+    closeAccountMenu();
     setSearchValue("");
+    setSearchUsers([]);
   };
+
+  // =====================================================
+  // OPEN SEARCHED USER
+  // =====================================================
+
+  const openUserProfile = (searchedUserId) => {
+    if (!searchedUserId) return;
+
+    setSearchOpen(false);
+    setSearchValue("");
+    setSearchUsers([]);
+
+    navigate(`/profile/${searchedUserId}`);
+  };
+
+  // =====================================================
+  // OPEN SAVED PINS
+  // =====================================================
+
+  const openSavedPins = () => {
+    setSearchOpen(false);
+    closeAccountMenu();
+    setSearchValue("");
+    setSearchUsers([]);
+
+    navigate("/saved");
+  };
+
+  // =====================================================
+  // ACCOUNT MENU
+  // =====================================================
+
+  const toggleAccountMenu = () => {
+    setAccountMenuOpen((previous) => !previous);
+  };
+
+  const closeAccountMenu = () => {
+    setAccountMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    closeAccountMenu();
+    navigate("/");
+  };
+
+  // =====================================================
+  // WAIT FOR PROFILE
+  // =====================================================
 
   if (!user || !userMeta) {
     return null;
   }
 
-  /*
-   * USER NAME
-   *
-   * Priority:
-   * 1. name
-   * 2. username
-   * 3. displayName
-   * 4. email username
-   */
+  // =====================================================
+  // USER DATA
+  // =====================================================
+
   const displayName =
     user.name ||
     user.username ||
@@ -240,22 +614,164 @@ export default function Profile() {
     user.email?.split("@")[0] ||
     "User";
 
-  const profilePic = userMeta.dp || user.photo || user.dp || "";
+  // =====================================================
+  // IMAGE URL
+  // =====================================================
+
+  const getImageUrl = (image) => {
+    if (!image || typeof image !== "string") {
+      return "";
+    }
+
+    const trimmed = image.trim();
+
+    if (!trimmed) {
+      return "";
+    }
+
+    if (
+      trimmed.startsWith("http://") ||
+      trimmed.startsWith("https://") ||
+      trimmed.startsWith("data:image/") ||
+      trimmed.startsWith("blob:")
+    ) {
+      return trimmed;
+    }
+
+    if (trimmed.startsWith("/")) {
+      return `${IMAGE_BASE_URL}${trimmed}`;
+    }
+
+    if (
+      trimmed.startsWith("uploads/") ||
+      trimmed.startsWith("images/")
+    ) {
+      return `${IMAGE_BASE_URL}/${trimmed}`;
+    }
+
+    return trimmed;
+  };
+
+  // =====================================================
+  // PROFILE PHOTO
+  // =====================================================
+
+  const profilePic = getImageUrl(
+    userMeta?.dp ||
+      userMeta?.photo ||
+      user.photo ||
+      user.photoURL ||
+      user.profilePicture ||
+      user.avatar ||
+      user.dp ||
+      ""
+  );
+
+  // =====================================================
+  // NORMALIZE ALL CREATED PINS
+  // =====================================================
+
+  const normalizedCreatedPins =
+    createdPins.map((pin) => ({
+      ...pin,
+
+      id: pin._id || pin.id,
+
+      title:
+        pin.title || "Untitled pin",
+
+      img:
+        pin.image ||
+        pin.img ||
+        "",
+
+      category:
+        pin.category ||
+        "Created",
+
+      // Creator information
+      creator:
+        pin.user || null,
+    }));
+
+  // =====================================================
+  // SEARCH PINS
+  // =====================================================
+
+  const searchablePins = [
+    ...normalizedCreatedPins,
+    ...demoPins,
+  ];
+
+  const filteredPins = searchablePins.filter((pin) => {
+    const haystack = [
+      pin.title,
+      pin.category,
+      pin.description,
+      pin.link,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return haystack.includes(
+      searchValue.trim().toLowerCase()
+    );
+  });
+
+  // =====================================================
+  // MIX DEMO PINS + ALL CREATED PINS
+  //
+  // DEMO PINS ARE NOT REMOVED.
+  // =====================================================
+
+  const mixedPins = [];
+
+  const maxLength = Math.max(
+    demoPins.length,
+    normalizedCreatedPins.length
+  );
+
+  for (
+    let index = 0;
+    index < maxLength;
+    index += 1
+  ) {
+    // CREATED PIN
+    if (normalizedCreatedPins[index]) {
+      mixedPins.push(
+        normalizedCreatedPins[index]
+      );
+    }
+
+    // DEMO PIN
+    if (demoPins[index]) {
+      mixedPins.push(demoPins[index]);
+    }
+  }
+
+  // =====================================================
+  // RENDER
+  // =====================================================
 
   return (
-    <Box>
+    <>
       {/* =====================================================
           MAIN NAVBAR
       ===================================================== */}
 
       <AppBar
         position="fixed"
-        className={`mainAppBar ${searchOpen ? "searchMode" : ""}`}
+        className={`mainAppBar ${
+          searchOpen ? "searchMode" : ""
+        }`}
       >
         <Toolbar className="mainToolbar">
+
           {!searchOpen ? (
             <>
               <div className="brandSection">
+
                 <img
                   src={logo}
                   alt="StylePins"
@@ -265,6 +781,7 @@ export default function Profile() {
                 <span className="brandName">
                   StylePins
                 </span>
+
               </div>
 
               <Box className="muiRight">
@@ -274,20 +791,29 @@ export default function Profile() {
                 <button
                   type="button"
                   className="miniBrand"
-                  aria-label="Open saved pins"
-                  onClick={() => navigate("/saved")}
+                  onClick={openSavedPins}
                 >
                   <div className="miniAvatar">
+
                     {profilePic ? (
-                      <img src={profilePic} alt="profile" />
+                      <img
+                        src={profilePic}
+                        alt="profile"
+                      />
                     ) : (
-                      displayName.charAt(0).toUpperCase()
+                      displayName
+                        .charAt(0)
+                        .toUpperCase()
                     )}
+
                   </div>
 
-                  <span>{displayName}</span>
+                  <span>
+                    {displayName}
+                  </span>
 
                   <ArrowDropDownIcon className="pillArrow" />
+
                 </button>
 
                 {/* SEARCH */}
@@ -329,18 +855,23 @@ export default function Profile() {
                   <ChatIcon fontSize="small" />
                 </button>
 
-                {/* AVATAR */}
+                {/* PROFILE CIRCLE */}
 
                 <button
                   type="button"
                   className="muiAvatar"
                   aria-label="Open saved pins"
-                  onClick={() => navigate("/saved")}
+                  onClick={openSavedPins}
                 >
                   {profilePic ? (
-                    <img src={profilePic} alt="profile" />
+                    <img
+                      src={profilePic}
+                      alt="profile"
+                    />
                   ) : (
-                    displayName.charAt(0).toUpperCase()
+                    displayName
+                      .charAt(0)
+                      .toUpperCase()
                   )}
                 </button>
 
@@ -348,144 +879,61 @@ export default function Profile() {
                   type="button"
                   className="collapseBtn"
                   aria-label="more options"
+                  onClick={toggleAccountMenu}
                 >
                   <ArrowDropDownIcon fontSize="small" />
                 </button>
+
               </Box>
             </>
           ) : (
-            <>
-              {/* =================================================
-                  SEARCH MODE NAVBAR
-              ================================================= */}
 
-              <div className="searchNavbar">
+            /* =================================================
+               SEARCH MODE
+            ================================================= */
 
-                <div className="searchNavLeft">
+            <div className="searchNavbar">
 
-                  {/* STYLEPINS LOGO */}
+              <div className="searchNavLeft">
 
-                  <div className="searchBrandMark">
-                    <img
-                      src={logo}
-                      alt="StylePins"
-                    />
-                  </div>
+                {/* LOGO */}
 
-                  {/* HOME FEED */}
+                <div className="searchBrandMark">
 
-                  <button
-                    type="button"
-                    className="homeFeedButton"
-                    onClick={closeSearch}
-                  >
-                    <span>Home feed</span>
-
-                    <span className="hamburgerIcon">
-                      ☰
-                    </span>
-                  </button>
-
-                  {/* USER */}
-
-                  <button
-                    type="button"
-                    className="searchProfilePill"
-                  >
-                    <div className="searchPillAvatar">
-                      {profilePic ? (
-                        <img
-                          src={profilePic}
-                          alt="profile"
-                        />
-                      ) : (
-                        displayName
-                          .charAt(0)
-                          .toUpperCase()
-                      )}
-                    </div>
-
-                    <span>{displayName}</span>
-
-                    <ArrowDropDownIcon fontSize="small" />
-                  </button>
-                </div>
-
-                {/* SEARCH BOX */}
-
-                <div className="expandedSearchBox">
-
-                  <SearchIcon className="expandedSearchIcon" />
-
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    value={searchValue}
-                    onChange={(event) =>
-                      setSearchValue(
-                        event.target.value
-                      )
-                    }
-                    autoFocus
+                  <img
+                    src={logo}
+                    alt="StylePins"
                   />
 
-                  <button
-                    type="button"
-                    className="searchToolBtn"
-                    aria-label="visual search"
-                  >
-                    <CameraAltIcon fontSize="small" />
-                  </button>
-
-                  <button
-                    type="button"
-                    className="searchToolBtn"
-                    aria-label="voice search"
-                  >
-                    <MicIcon fontSize="small" />
-                  </button>
                 </div>
 
-                {/* RIGHT SIDE */}
+                {/* HOME */}
 
-                <div className="searchNavRight">
+                <button
+                  type="button"
+                  className="homeFeedButton"
+                  onClick={closeSearch}
+                >
+                  <span>
+                    Home feed
+                  </span>
 
-                  <button
-                    type="button"
-                    className="searchNavIcon"
-                    onClick={() =>
-                      setNotificationsOpen(true)
-                    }
-                  >
-                    <NotificationsIcon fontSize="small" />
-                  </button>
+                  <span className="hamburgerIcon">
+                    ☰
+                  </span>
 
-                  <button
-                    type="button"
-                    className="searchNavIcon"
-                    onClick={() =>
-                      window.dispatchEvent(
-                        new Event("openInbox")
-                      )
-                    }
-                  >
-                    <ChatIcon fontSize="small" />
-                  </button>
+                </button>
 
-                  <button
-                    type="button"
-                    className="searchNavIcon"
-                  >
-                    <MoreHorizIcon fontSize="small" />
-                  </button>
+                {/* PROFILE */}
 
-                  <button
-                    type="button"
-                    className="searchNavAvatar"
-                    onClick={() =>
-                      navigate("/saved")
-                    }
-                  >
+                <button
+                  type="button"
+                  className="searchProfilePill"
+                  onClick={openSavedPins}
+                >
+
+                  <div className="searchPillAvatar">
+
                     {profilePic ? (
                       <img
                         src={profilePic}
@@ -496,21 +944,193 @@ export default function Profile() {
                         .charAt(0)
                         .toUpperCase()
                     )}
-                  </button>
 
-                  <button
-                    type="button"
-                    className="searchCloseBtn"
-                    aria-label="close search"
-                    onClick={closeSearch}
-                  >
-                    <ArrowDropDownIcon fontSize="small" />
-                  </button>
+                  </div>
 
+                  <span>
+                    {displayName}
+                  </span>
+
+                  <ArrowDropDownIcon fontSize="small" />
+
+                </button>
+
+              </div>
+
+              {/* SEARCH BOX */}
+
+              <div className="expandedSearchBox">
+
+                <SearchIcon className="expandedSearchIcon" />
+
+                <input
+                  type="text"
+                  placeholder="Search people"
+                  value={searchValue}
+                  onChange={(event) =>
+                    setSearchValue(
+                      event.target.value
+                    )
+                  }
+                  autoFocus
+                />
+
+                <button
+                  type="button"
+                  className="searchToolBtn"
+                  aria-label="visual search"
+                >
+                  <CameraAltIcon fontSize="small" />
+                </button>
+
+                <button
+                  type="button"
+                  className="searchToolBtn"
+                  aria-label="voice search"
+                >
+                  <MicIcon fontSize="small" />
+                </button>
+
+              </div>
+
+              {/* RIGHT SIDE */}
+
+              <div className="searchNavRight">
+
+                <button
+                  type="button"
+                  className="searchNavIcon"
+                  onClick={() =>
+                    setNotificationsOpen(true)
+                  }
+                >
+                  <NotificationsIcon fontSize="small" />
+                </button>
+
+                <button
+                  type="button"
+                  className="searchNavIcon"
+                  onClick={() =>
+                    window.dispatchEvent(
+                      new Event("openInbox")
+                    )
+                  }
+                >
+                  <ChatIcon fontSize="small" />
+                </button>
+
+                <button
+                  type="button"
+                  className="searchNavIcon"
+                  aria-label="more options"
+                >
+                  <MoreHorizIcon fontSize="small" />
+                </button>
+
+                <button
+                  type="button"
+                  className="searchNavAvatar"
+                  aria-label="Open saved pins"
+                  onClick={openSavedPins}
+                >
+                  {profilePic ? (
+                    <img
+                      src={profilePic}
+                      alt="profile"
+                    />
+                  ) : (
+                    displayName
+                      .charAt(0)
+                      .toUpperCase()
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  className="searchCloseBtn"
+                  aria-label="close search"
+                  onClick={closeSearch}
+                >
+                  <ArrowDropDownIcon fontSize="small" />
+                </button>
+
+              </div>
+
+            </div>
+          )}
+
+          {accountMenuOpen && (
+            <div className="accountMenu" role="menu" aria-label="Account menu">
+              <div className="accountHeader">
+                <div className="accountAvatar">
+                  {profilePic ? (
+                    <img src={profilePic} alt="profile" />
+                  ) : (
+                    displayName.charAt(0).toUpperCase()
+                  )}
+                </div>
+
+                <div className="accountHeaderInfo">
+                  <div className="accountHeaderName">{displayName}</div>
+                  <div className="accountHeaderMeta">Business</div>
+                  <div className="accountHeaderEmail">{user.email}</div>
                 </div>
               </div>
-            </>
+
+              <div className="accountSectionLabel">Your accounts</div>
+
+              <button type="button" className="accountMenuItem" onClick={() => navigate("/saved") }>
+                Add Pinterest account
+              </button>
+
+              <button type="button" className="accountMenuItem" onClick={() => navigate("/settings") }>
+                Settings
+              </button>
+
+              <div className="accountSectionLabel">Content</div>
+
+              <button type="button" className="accountMenuItem" onClick={() => navigate("/saved") }>
+                Import content
+              </button>
+
+              <button type="button" className="accountMenuItem" onClick={() => navigate("/saved") }>
+                Link to Pinterest
+              </button>
+
+              <button type="button" className="accountMenuItem" onClick={() => navigate("/saved") }>
+                Reports and violations center
+              </button>
+
+              <div className="accountSectionLabel">Help</div>
+
+              <button type="button" className="accountMenuItem" onClick={() => window.open("https://help.pinterest.com/", "_blank") }>
+                Help center
+              </button>
+
+              <button type="button" className="accountMenuItem" onClick={() => window.open("https://help.pinterest.com/", "_blank") }>
+                Request a feature
+              </button>
+
+              <div className="accountSectionLabel">Privacy</div>
+
+              <button type="button" className="accountMenuItem" onClick={() => window.open("https://policy.pinterest.com/privacy-policy", "_blank") }>
+                Privacy policy
+              </button>
+
+              <button type="button" className="accountMenuItem" onClick={() => window.open("https://policy.pinterest.com/privacy-rights", "_blank") }>
+                Your privacy rights
+              </button>
+
+              <button type="button" className="accountMenuItem" onClick={() => window.open("https://policy.pinterest.com/terms-of-service", "_blank") }>
+                Terms of service
+              </button>
+
+              <button type="button" className="accountMenuItem logoutButton" onClick={handleLogout}>
+                Log out
+              </button>
+            </div>
           )}
+
         </Toolbar>
       </AppBar>
 
@@ -523,40 +1143,229 @@ export default function Profile() {
           className="searchPageOverlay"
           onClick={closeSearch}
         >
+
           <div
             className="recentSearchPanel"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
-            <h3>Recent searches</h3>
 
-            <div className="recentSearchGrid">
-              {recentSearches.map((item) => (
-                <button
-                  type="button"
-                  key={item.id}
-                  className="recentSearchItem"
-                  onClick={() =>
-                    setSearchValue(item.text)
-                  }
-                >
-                  <img
-                    src={item.image}
-                    alt={item.text}
-                  />
+            <h3>
+              {searchValue.trim()
+                ? "Search results"
+                : "Recent searches"}
+            </h3>
 
-                  <div className="recentSearchText">
-                    <span>{item.text}</span>
+            {searchValue.trim() ? (
 
-                    {item.meta && (
-                      <small>{item.meta}</small>
-                    )}
+              <div className="searchResultsStack">
+
+                <div className="searchResultSectionTitle">
+                  People
+                </div>
+
+                {searchLoading ? (
+
+                  <div className="userSearchMessage">
+                    Searching...
                   </div>
-                </button>
-              ))}
-            </div>
+
+                ) : searchUsers.length === 0 ? (
+
+                  <div className="userSearchMessage">
+                    No users found.
+                  </div>
+
+                ) : (
+
+                  searchUsers.map(
+                    (searchedUser) => {
+
+                      const searchedName =
+                        searchedUser.name ||
+                        searchedUser.username ||
+                        searchedUser.displayName ||
+                        searchedUser.email?.split(
+                          "@"
+                        )[0] ||
+                        "User";
+
+                      const searchedUsername =
+                        searchedUser.username ||
+                        searchedUser.email?.split(
+                          "@"
+                        )[0] ||
+                        "";
+
+                      const searchedPhoto =
+                        searchedUser.photo ||
+                        searchedUser.profilePicture ||
+                        searchedUser.avatar ||
+                        "";
+
+                      const searchedId =
+                        searchedUser._id ||
+                        searchedUser.id;
+
+                      return (
+                        <button
+                          type="button"
+                          key={searchedId}
+                          className="userSearchItem"
+                          onClick={() =>
+                            openUserProfile(
+                              searchedId
+                            )
+                          }
+                        >
+
+                          <div className="userSearchAvatar">
+
+                            {searchedPhoto ? (
+                              <img
+                                src={searchedPhoto}
+                                alt={searchedName}
+                              />
+                            ) : (
+                              searchedName
+                                .charAt(0)
+                                .toUpperCase()
+                            )}
+
+                          </div>
+
+                          <div className="userSearchInfo">
+
+                            <div className="userSearchName">
+                              {searchedName}
+                            </div>
+
+                            {searchedUsername && (
+                              <div className="userSearchUsername">
+                                @{searchedUsername}
+                              </div>
+                            )}
+
+                            {searchedUser.bio && (
+                              <div className="userSearchBio">
+                                {searchedUser.bio}
+                              </div>
+                            )}
+
+                          </div>
+
+                        </button>
+                      );
+                    }
+                  )
+
+                )}
+
+                <div className="searchResultSectionTitle pinSearchHeading">
+                  Pins
+                </div>
+
+                {filteredPins.length > 0 ? (
+
+                  <div className="pinSearchList">
+
+                    {filteredPins.map((pin) => {
+                      const pinId = pin._id || pin.id;
+                      const pinTitle =
+                        pin.title || "Untitled pin";
+                      const pinCategory =
+                        pin.category || "Created";
+
+                      return (
+                        <button
+                          type="button"
+                          key={pinId}
+                          className="pinSearchListItem"
+                          onClick={() => {
+                            if (pinId) {
+                              closeSearch();
+                              navigate(`/pin/${pinId}`);
+                            }
+                          }}
+                        >
+
+                          <div className="pinSearchIconWrap">
+                            <SearchIcon fontSize="small" />
+                          </div>
+
+                          <div className="pinSearchMeta">
+                            <div className="pinSearchTitle">
+                              {pinTitle}
+                            </div>
+
+                            <div className="pinSearchCategory">
+                              {pinCategory}
+                            </div>
+                          </div>
+
+                        </button>
+                      );
+                    })}
+
+                  </div>
+
+                ) : (
+
+                  <div className="userSearchMessage">
+                    No pins found.
+                  </div>
+
+                )}
+
+              </div>
+
+            ) : (
+
+              <div className="recentSearchGrid">
+
+                {recentSearches.map(
+                  (item) => (
+                    <button
+                      type="button"
+                      key={item.id}
+                      className="recentSearchItem"
+                      onClick={() =>
+                        setSearchValue(
+                          item.text
+                        )
+                      }
+                    >
+
+                      <img
+                        src={item.image}
+                        alt={item.text}
+                      />
+
+                      <div className="recentSearchText">
+
+                        <span>
+                          {item.text}
+                        </span>
+
+                        {item.meta && (
+                          <small>
+                            {item.meta}
+                          </small>
+                        )}
+
+                      </div>
+
+                    </button>
+                  )
+                )}
+
+              </div>
+
+            )}
+
           </div>
+
         </div>
       )}
 
@@ -571,20 +1380,24 @@ export default function Profile() {
             setNotificationsOpen(false)
           }
         >
+
           <div
             className="notifications-drawer"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
+
             <div className="notifications-header">
 
               <div className="notifications-title-wrapper">
+
                 <div className="notifications-dot" />
 
                 <div className="notifications-title">
                   Notifications
                 </div>
+
               </div>
 
               <button
@@ -614,7 +1427,8 @@ export default function Profile() {
                   subtitle:
                     "to get inspired",
                   time: "3h",
-                  img: "https://images.unsplash.com/photo-1517511620798-cec17d428bc0?auto=format&fit=crop&w=120&q=80",
+                  img:
+                    "https://images.unsplash.com/photo-1517511620798-cec17d428bc0?auto=format&fit=crop&w=120&q=80",
                 },
                 {
                   id: 2,
@@ -622,7 +1436,8 @@ export default function Profile() {
                   subtitle:
                     "See fresh inspiration now.",
                   time: "13h",
-                  img: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=120&q=80",
+                  img:
+                    "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=120&q=80",
                 },
                 {
                   id: 3,
@@ -630,7 +1445,8 @@ export default function Profile() {
                   subtitle:
                     "Updates from what's popular.",
                   time: "1d",
-                  img: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=120&q=80",
+                  img:
+                    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=120&q=80",
                 },
                 {
                   id: 4,
@@ -638,13 +1454,16 @@ export default function Profile() {
                   subtitle:
                     "Ideas that fit your vibe.",
                   time: "1d",
-                  img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
+                  img:
+                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
                 },
               ].map((item) => (
+
                 <div
                   key={item.id}
                   className="notification-row"
                 >
+
                   <img
                     src={item.img}
                     alt="notification"
@@ -652,6 +1471,7 @@ export default function Profile() {
                   />
 
                   <div className="notification-body">
+
                     <div className="notification-title">
                       {item.title}
                     </div>
@@ -659,18 +1479,27 @@ export default function Profile() {
                     <div className="notification-subtitle">
                       {item.subtitle}
                     </div>
+
                   </div>
 
                   <div className="notification-meta">
-                    <span>{item.time}</span>
+
+                    <span>
+                      {item.time}
+                    </span>
 
                     <MoreHorizIcon fontSize="small" />
+
                   </div>
+
                 </div>
+
               ))}
 
             </div>
+
           </div>
+
         </div>
       )}
 
@@ -690,6 +1519,7 @@ export default function Profile() {
 
       {/* =====================================================
           PIN FEED
+          ALL CREATED PINS + DEMO PINS
       ===================================================== */}
 
       <div
@@ -697,47 +1527,117 @@ export default function Profile() {
           searchOpen ? "feedDimmed" : ""
         }`}
       >
-        {demoPins.map((pin) => (
-          <div
-            className="muiPin"
-            key={pin.id}
-          >
-            <img
-              src={pin.img}
-              alt={pin.title}
-            />
 
-            {/* SAVE BUTTON */}
+        {mixedPins.map((pin) => {
 
-            <button
-              type="button"
-              className="muiSaveBtn"
-              onClick={(event) => {
-                event.stopPropagation();
-                handleSavePin(pin);
+          const pinImage = getImageUrl(
+            pin.img ||
+              pin.image ||
+              ""
+          );
+
+          const pinTitle =
+            pin.title ||
+            "Untitled pin";
+
+          const pinCategory =
+            pin.category ||
+            "Created";
+
+          const pinKey =
+            pin._id ||
+            pin.id;
+
+          return (
+            <div
+              className="muiPin"
+              key={pinKey}
+              role="button"
+              tabIndex={0}
+              onClick={() => {
+                if (pinKey) {
+                  navigate(`/pin/${pinKey}`);
+                }
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+
+                  if (pinKey) {
+                    navigate(`/pin/${pinKey}`);
+                  }
+                }
               }}
             >
-              Save
-            </button>
 
-            <div className="pinMeta">
+              {pinImage ? (
+                <img
+                  src={pinImage}
+                  alt={pinTitle}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    aspectRatio: "1 / 1",
+                    background: "#eee",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  No image
+                </div>
+              )}
 
-              <span>{pin.category}</span>
+              {/* SAVE */}
 
               <button
                 type="button"
-                className="pinMoreBtn"
-                aria-label="more options"
+                className="muiSaveBtn"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleSavePin(pin);
+                }}
               >
-                <MoreHorizIcon fontSize="small" />
+                Save
               </button>
 
+              {/* PIN META */}
+
+              <div className="pinMeta">
+
+                <span>
+                  {pinCategory}
+                </span>
+
+                <button
+                  type="button"
+                  className="pinMoreBtn"
+                  aria-label="more options"
+                >
+                  <MoreHorizIcon fontSize="small" />
+                </button>
+
+              </div>
+
             </div>
-          </div>
-        ))}
+          );
+        })}
+
       </div>
 
-      <InboxPanel />
-    </Box>
+      {/* =====================================================
+          INBOX
+      ===================================================== */}
+
+      <InboxPanel
+        currentUserId={
+          user?._id ||
+          user?.id ||
+          ""
+        }
+      />
+    </>
   );
 }

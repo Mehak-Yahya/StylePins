@@ -1,0 +1,677 @@
+/* =====================================================
+   PUBLIC PROFILE PAGE
+===================================================== */
+
+.publicProfilePage {
+  min-height: 100vh;
+  width: 100%;
+  background: #ffffff;
+  color: #111111;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.publicProfileTopbar {
+  height: 72px;
+  width: 100%;
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #eeeeee;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 28px;
+
+  position: sticky;
+  top: 0;
+
+  background: #ffffff;
+  z-index: 20;
+}
+
+.publicBackButton,
+.publicMoreButton {
+  width: 44px;
+  height: 44px;
+
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  color: #333333;
+}
+
+.publicBackButton:hover,
+.publicMoreButton:hover {
+  background: #f2f2f2;
+}
+
+.publicProfileTopTitle {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.publicProfileContent {
+  width: 100%;
+  max-width: 1280px;
+
+  margin: 0 auto;
+
+  padding: 55px 32px 80px;
+
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   PROFILE HEADER
+===================================================== */
+
+.publicProfileHeader {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  text-align: center;
+}
+
+
+/* =====================================================
+   AVATAR
+===================================================== */
+
+.publicProfileAvatar {
+  width: 150px;
+  height: 150px;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  background: #e9e9e9;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 22px;
+}
+
+.publicProfileAvatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.publicProfileAvatar span {
+  font-size: 54px;
+  font-weight: 700;
+  color: #777777;
+}
+
+
+/* =====================================================
+   NAME
+===================================================== */
+
+.publicProfileName {
+  margin: 0;
+
+  font-size: 32px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.publicProfileUsername {
+  margin-top: 7px;
+
+  color: #666666;
+  font-size: 15px;
+}
+
+.publicProfileBio {
+  max-width: 550px;
+
+  margin: 16px auto 0;
+
+  color: #555555;
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.publicProfileStats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 45px;
+
+  margin-top: 25px;
+}
+
+.publicStat {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+}
+
+.publicStat strong {
+  font-size: 16px;
+}
+
+.publicStat span {
+  color: #555555;
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.publicProfileActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-top: 28px;
+}
+
+.followButton,
+.messageButton {
+  height: 44px;
+
+  border-radius: 22px;
+
+  padding: 0 23px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+}
+
+.followButton {
+  border: none;
+
+  background: #e60023;
+  color: #ffffff;
+}
+
+.followButton:hover {
+  background: #c90020;
+}
+
+.followButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.followButton.following {
+  background: #111111;
+}
+
+.followButton.following:hover {
+  background: #333333;
+}
+
+.messageButton {
+  border: 1px solid #dddddd;
+
+  background: #ffffff;
+  color: #222222;
+}
+
+.messageButton:hover {
+  background: #f5f5f5;
+}
+
+
+/* =====================================================
+   TABS
+===================================================== */
+
+.publicProfileTabs {
+  margin-top: 60px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  display: flex;
+  justify-content: center;
+
+  gap: 45px;
+}
+
+.publicProfileTab {
+  border: none;
+  background: transparent;
+
+  padding: 16px 5px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: #777777;
+
+  cursor: pointer;
+
+  position: relative;
+}
+
+.publicProfileTab.active {
+  color: #111111;
+}
+
+.publicProfileTab.active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: -1px;
+
+  height: 3px;
+
+  background: #111111;
+
+  border-radius: 3px 3px 0 0;
+}
+
+
+/* =====================================================
+   PIN AREA
+===================================================== */
+
+.publicProfilePins {
+  width: 100%;
+
+  margin-top: 30px;
+}
+
+
+/* =====================================================
+   PINTEREST STYLE MASONRY
+===================================================== */
+
+.publicPinsGrid {
+  width: 100%;
+
+  column-count: 5;
+  column-gap: 18px;
+
+  padding: 10px 0 50px;
+}
+
+
+/* =====================================================
+   PIN CARD
+===================================================== */
+
+.publicPinCard {
+  width: 100%;
+
+  display: inline-block;
+
+  vertical-align: top;
+
+  margin: 0 0 18px;
+
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  background: #eeeeee;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 2px 8px rgba(17, 17, 17, 0.06);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.publicPinCard:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 7px 18px rgba(17, 17, 17, 0.12);
+}
+
+
+/* =====================================================
+   PIN IMAGE
+===================================================== */
+
+.publicPinImage {
+  width: 100%;
+
+  height: auto;
+
+  display: block;
+
+  object-fit: cover;
+
+  background: #eeeeee;
+}
+
+
+/*
+   IMPORTANT:
+
+   Do NOT give the image a fixed height.
+
+   Pinterest keeps different image ratios:
+   - portrait
+   - square
+   - landscape
+
+   height:auto allows that.
+*/
+
+
+/* =====================================================
+   PIN TITLE
+===================================================== */
+
+.publicPinTitle {
+  padding: 11px 13px;
+
+  background: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #222222;
+
+  line-height: 1.35;
+}
+
+
+/* =====================================================
+   NO IMAGE
+===================================================== */
+
+.publicPinNoImage {
+  width: 100%;
+  min-height: 220px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eeeeee;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.publicProfileEmpty {
+  width: 100%;
+
+  min-height: 300px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.publicProfileEmpty h3 {
+  margin: 0;
+
+  font-size: 20px;
+}
+
+.publicProfileEmpty p {
+  margin-top: 10px;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.publicProfileLoading {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #777777;
+
+  font-size: 16px;
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.publicProfileError {
+  min-height: calc(100vh - 72px);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.publicProfileError h2 {
+  margin-bottom: 8px;
+}
+
+.publicProfileError p {
+  color: #777777;
+}
+
+.backToProfileButton {
+  margin-top: 20px;
+
+  padding: 12px 20px;
+
+  border: none;
+
+  border-radius: 22px;
+
+  background: #e60023;
+
+  color: #ffffff;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.backToProfileButton:hover {
+  background: #c90020;
+}
+
+
+/* =====================================================
+   LARGE SCREEN
+===================================================== */
+
+@media (min-width: 1500px) {
+  .publicProfileContent {
+    max-width: 1450px;
+  }
+
+  .publicPinsGrid {
+    column-count: 6;
+    column-gap: 20px;
+  }
+}
+
+
+/* =====================================================
+   DESKTOP
+===================================================== */
+
+@media (max-width: 1200px) {
+  .publicProfileContent {
+    max-width: 1100px;
+  }
+
+  .publicPinsGrid {
+    column-count: 4;
+  }
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+  .publicProfileContent {
+    padding: 45px 22px 60px;
+  }
+
+  .publicPinsGrid {
+    column-count: 3;
+    column-gap: 15px;
+  }
+
+  .publicPinCard {
+    margin-bottom: 15px;
+  }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 650px) {
+  .publicProfileTopbar {
+    padding: 0 14px;
+  }
+
+  .publicProfileContent {
+    padding: 35px 14px 60px;
+  }
+
+  .publicProfileAvatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .publicProfileName {
+    font-size: 27px;
+  }
+
+  .publicProfileStats {
+    gap: 25px;
+  }
+
+  .publicProfileActions {
+    width: 100%;
+  }
+
+  .followButton,
+  .messageButton {
+    flex: 1;
+  }
+
+  .publicProfileTabs {
+    margin-top: 45px;
+  }
+
+  .publicPinsGrid {
+    column-count: 2;
+    column-gap: 12px;
+  }
+
+  .publicPinCard {
+    margin-bottom: 12px;
+    border-radius: 12px;
+  }
+
+  .publicPinTitle {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+}
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 400px) {
+  .publicPinsGrid {
+    column-count: 2;
+    column-gap: 9px;
+  }
+
+  .publicPinCard {
+    margin-bottom: 9px;
+    border-radius: 10px;
+  }
+
+  .publicPinTitle {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
