@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { encryptMessageText } from "../utils/messageEncryption.js";
 
 const messageSchema = new mongoose.Schema(
   {
@@ -26,12 +25,5 @@ const messageSchema = new mongoose.Schema(
   }
 );
 
-messageSchema.pre("save", function encryptText(next) {
-  if (this.isModified("text")) {
-    this.text = encryptMessageText(this.text);
-  }
-
-  next();
-});
-
 export default mongoose.model("Message", messageSchema);
+

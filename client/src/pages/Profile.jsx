@@ -63,6 +63,7 @@ const demoPins = [
     img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80",
     category: "Digital Products",
   },
+
   {
     id: 7,
     title: "What if it all works out?",
@@ -87,7 +88,12 @@ const demoPins = [
     img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80",
     category: "Style",
   },
- 
+  {
+    id: 11,
+    title: "Brand mood",
+    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1000&q=80",
+    category: "Inspiration",
+  },
  
 ];
 
