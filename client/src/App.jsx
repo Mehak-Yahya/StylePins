@@ -31,23 +31,25 @@ function AppContent() {
 
   const location = useLocation();
 
-  // =====================================================
-  // HIDE MAIN NAVBAR
-  // =====================================================
-
   const hideNavbar =
     location.pathname.startsWith("/reset-password") ||
     location.pathname === "/email-sent" ||
     location.pathname.startsWith("/profile") ||
     location.pathname === "/saved" ||
-    location.pathname.startsWith("/settings");
+    location.pathname.startsWith("/settings") ||
+    location.pathname.startsWith("/pin") ||
+    location.pathname === "/create-pin" ||
+    location.pathname === "/create-board" ||
+    location.pathname === "/create-collage";
+
+  const isCreatePage =
+    location.pathname === "/create-pin" ||
+    location.pathname === "/create-board" ||
+    location.pathname === "/create-collage";
 
   return (
     <>
-      {/* =====================================================
-          MAIN NAVBAR
-      ===================================================== */}
-
+     
       {!hideNavbar && (
         <Navbar
           openSignup={() => setShowSignup(true)}
@@ -55,11 +57,7 @@ function AppContent() {
         />
       )}
 
-      {/* =====================================================
-          SIGNUP MODAL
-      ===================================================== */}
-
-      {showSignup && (
+      {showSignup && !isCreatePage && (
         <Signup
           onClose={() => setShowSignup(false)}
           openLogin={() => {
@@ -69,11 +67,7 @@ function AppContent() {
         />
       )}
 
-      {/* =====================================================
-          LOGIN MODAL
-      ===================================================== */}
-
-      {showLogin && (
+      {showLogin && !isCreatePage && (
         <Login
           onClose={() => setShowLogin(false)}
           openSignup={() => {
@@ -83,15 +77,8 @@ function AppContent() {
         />
       )}
 
-      {/* =====================================================
-          ROUTES
-      ===================================================== */}
-
       <Routes>
-        {/* =================================================
-            HOME
-        ================================================= */}
-
+      
         <Route
           path="/"
           element={
@@ -101,10 +88,6 @@ function AppContent() {
             />
           }
         />
-
-        {/* =================================================
-            RESET PASSWORD
-        ================================================= */}
 
         <Route
           path="/reset-password"
@@ -116,10 +99,6 @@ function AppContent() {
           }
         />
 
-        {/* =================================================
-            EMAIL SENT
-        ================================================= */}
-
         <Route
           path="/email-sent"
           element={
@@ -129,10 +108,6 @@ function AppContent() {
             />
           }
         />
-
-        {/* =================================================
-            SET PASSWORD
-        ================================================= */}
 
         <Route
           path="/reset-password/:token"
@@ -144,12 +119,6 @@ function AppContent() {
           }
         />
 
-        {/* =================================================
-            MY PROFILE
-
-            /profile
-        ================================================= */}
-
         <Route
           path="/profile"
           element={
@@ -158,15 +127,6 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
-
-        {/* =================================================
-            OTHER USER PUBLIC PROFILE
-
-            /profile/:userId
-
-            Example:
-            /profile/6a737601af4c2e30c0a73cd4
-        ================================================= */}
 
         <Route
           path="/profile/:userId"
@@ -177,10 +137,6 @@ function AppContent() {
           }
         />
 
-        {/* =================================================
-            SAVED PINS
-        ================================================= */}
-
         <Route
           path="/saved"
           element={
@@ -189,10 +145,6 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
-
-        {/* =================================================
-            EDIT PROFILE
-        ================================================= */}
 
         <Route
           path="/settings/edit-profile"
@@ -203,10 +155,6 @@ function AppContent() {
           }
         />
 
-        {/* =================================================
-            CREATE PIN
-        ================================================= */}
-
         <Route
           path="/create-pin"
           element={
@@ -216,10 +164,6 @@ function AppContent() {
           }
         />
 
-        {/* =================================================
-            CREATE BOARD
-        ================================================= */}
-
         <Route
           path="/create-board"
           element={
@@ -228,11 +172,7 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
-
-        {/* =================================================
-            CREATE COLLAGE
-        ================================================= */}
-
+      
         <Route
           path="/create-collage"
           element={
@@ -241,11 +181,12 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
+
+        
       </Routes>
     </>
   );
 }
-
 function App() {
   return (
     <BrowserRouter>
