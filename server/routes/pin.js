@@ -12,11 +12,7 @@ const uploadsDir = path.join(__dirname, "..", "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
-
-// =====================================================
 // CREATE PIN
-// =====================================================
-
 router.post("/", async (req, res) => {
   try {
     const {
@@ -101,15 +97,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// =====================================================
 // GET USER CREATED PINS
-// =====================================================
-// Used by:
-// /profile/:userId
-//
-// Returns only Pins CREATED by that user.
-// =====================================================
-
 router.get("/user/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
@@ -141,9 +129,28 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
-// =====================================================
 // GET SINGLE PIN
-// =====================================================
+// GET ALL PINS 
+router.get("/", async (req, res) => {
+  try {
+    const pins = await Pin.find()
+      .populate("user", "name username email photo bio")
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({
+      pins,
+      count: pins.length,
+    });
+  } catch (error) {
+    console.error("Get All Pins Error:", error);
+
+    return res.status(500).json({
+      message: "Failed to load pins.",
+      error: error.message,
+    });
+  }
+});
 
 router.get("/:id", async (req, res) => {
   try {
@@ -173,10 +180,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// =====================================================
 // INCREMENT VIEW
-// =====================================================
-
 router.patch("/:id/view", async (req, res) => {
   try {
     const pin = await Pin.findByIdAndUpdate(
@@ -210,10 +214,7 @@ router.patch("/:id/view", async (req, res) => {
   }
 });
 
-// =====================================================
 // INCREMENT SAVE
-// =====================================================
-
 router.patch("/:id/save", async (req, res) => {
   try {
     const pin = await Pin.findByIdAndUpdate(
@@ -247,10 +248,7 @@ router.patch("/:id/save", async (req, res) => {
   }
 });
 
-// =====================================================
 // UNSAVE
-// =====================================================
-
 router.patch("/:id/unsave", async (req, res) => {
   try {
     const pin = await Pin.findById(req.params.id);
@@ -262,9 +260,7 @@ router.patch("/:id/unsave", async (req, res) => {
     }
 
     pin.saves = Math.max(0, pin.saves - 1);
-
     await pin.save();
-
     return res.status(200).json({
       saves: pin.saves,
     });
@@ -278,10 +274,7 @@ router.patch("/:id/unsave", async (req, res) => {
   }
 });
 
-// =====================================================
 // SHARE
-// =====================================================
-
 router.patch("/:id/share", async (req, res) => {
   try {
     const pin = await Pin.findByIdAndUpdate(
