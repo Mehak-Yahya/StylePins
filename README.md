@@ -71,6 +71,8 @@ StylePins is a Pinterest-inspired fashion discovery and inspiration platform bui
 <img width="1358" height="682" alt="0 own profil" src="https://github.com/user-attachments/assets/a7a1902f-f037-4fbd-b8de-96fa75439872" />
 <img width="1364" height="690" alt="0 craete pn" src="https://github.com/user-attachments/assets/0f285357-e397-4f04-a376-291377760733" />
 <img width="1366" height="681" alt="0 saved" src="https://github.com/user-attachments/assets/ff310910-72bd-4a3b-a7e5-ea5d2c19506c" />
+<img width="1357" height="683" alt="0 not" src="https://github.com/user-attachments/assets/9f3df0d0-bbab-4a5a-85d9-bcffedaa03e0" />
+
 <img width="1366" height="689" alt="0 public profil" src="https://github.com/user-attachments/assets/7026a712-aaa5-4dbb-a13b-8aee2e95423e" />
 <img width="1361" height="695" alt="0 chat" src="https://github.com/user-attachments/assets/3cf2c221-f38a-43a8-8ea3-06144e01921c" />
 
