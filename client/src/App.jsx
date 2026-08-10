@@ -20,9 +20,7 @@ import PublicProfile from "./pages/PublicProfile";
 import SavePins from "./pages/SavePins";
 import EditProfile from "./pages/EditProfile";
 import CreatePin from "./pages/CreatePin";
-import CreateBoard from "./pages/CreateBoard";
 import CreateCollage from "./pages/CreateCollage";
-
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 function AppContent() {
@@ -160,15 +158,6 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <CreatePin />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/create-board"
-          element={
-            <ProtectedRoute>
-              <CreateBoard />
             </ProtectedRoute>
           }
         />
