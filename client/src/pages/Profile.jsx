@@ -64,12 +64,6 @@ const demoPins = [
     category: "Digital Products",
   },
   {
-    id: 6,
-    title: "Gold details",
-    img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1000&q=80",
-    category: "Jewelry",
-  },
-  {
     id: 7,
     title: "What if it all works out?",
     img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
@@ -93,18 +87,8 @@ const demoPins = [
     img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80",
     category: "Style",
   },
-  {
-    id: 11,
-    title: "Brand mood",
-    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1000&q=80",
-    category: "Inspiration",
-  },
-  {
-    id: 12,
-    title: "Daily picks",
-    img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80",
-    category: "Creative",
-  },
+ 
+ 
 ];
 
 // =====================================================
