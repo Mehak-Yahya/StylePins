@@ -66,16 +66,15 @@ StylePins is a Pinterest-inspired fashion discovery and inspiration platform bui
 <img width="1366" height="721" alt="12 password reset" src="https://github.com/user-attachments/assets/ae7bfa9f-d3f7-4ad3-8445-fe41bbc075d0" />
 
 <img width="1366" height="728" alt="13 password tips" src="https://github.com/user-attachments/assets/a7579418-f83e-412b-9543-0fdff84803f4" />
+<img width="1366" height="730" alt="0 home" src="https://github.com/user-attachments/assets/31cb4e7a-aa69-41fb-9999-67997df3815c" />
+<img width="1366" height="691" alt="0 search" src="https://github.com/user-attachments/assets/3dc9687c-1f43-4980-8635-4a5fa1588ac2" />
+<img width="1358" height="682" alt="0 own profil" src="https://github.com/user-attachments/assets/a7a1902f-f037-4fbd-b8de-96fa75439872" />
+<img width="1364" height="690" alt="0 craete pn" src="https://github.com/user-attachments/assets/0f285357-e397-4f04-a376-291377760733" />
+<img width="1366" height="681" alt="0 saved" src="https://github.com/user-attachments/assets/ff310910-72bd-4a3b-a7e5-ea5d2c19506c" />
+<img width="1357" height="683" alt="0 not" src="https://github.com/user-attachments/assets/9f3df0d0-bbab-4a5a-85d9-bcffedaa03e0" />
 
-
-## Future Enhancements
-
-- Pin Creation & Management
-- Save & Organize Boards
-- Like & Comment System
-- Search & Filters
-- AI-Based Fashion Recommendations
-- Real-Time Notifications
+<img width="1366" height="689" alt="0 public profil" src="https://github.com/user-attachments/assets/7026a712-aaa5-4dbb-a13b-8aee2e95423e" />
+<img width="1361" height="695" alt="0 chat" src="https://github.com/user-attachments/assets/3cf2c221-f38a-43a8-8ea3-06144e01921c" />
 
 ## Author
 
